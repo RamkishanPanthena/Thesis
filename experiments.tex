@@ -1,3 +1,4 @@
+\newpage
 \section{Experiments}
 
 % \section{Baseline}
@@ -26,30 +27,6 @@ $\hat{y}^{(n)}_{l}$ = 1 if label $l$ is a predicted label.
 \newpage
 \subsection{Datasets}
 
-\subsubsection{Guardian}
-
-\subsubsection{20 Newsgroups}
-
-The 20 Newsgroups dataset is a collection of approximately 20,000 newsgroup documents, partitioned (nearly) evenly across 20 different newsgroups. It has become a popular data set for experiments in text applications of machine learning techniques, such as text classification and text clustering.
-
-The data is organized into 20 different newsgroups, each corresponding to a different topic. Some of the newsgroups are very closely related to each other (e.g.\textbf{ comp.sys.ibm.pc.hardware / comp.sys.mac.hardware}), while others are highly unrelated (e.g \textbf{misc.forsale / soc.religion.christian}). Except for a small fraction of the articles, each document belongs to exactly one newsgroup. The task is to learn which newsgroup an article was posted to. Below is a list of 20 newsgroup partitioned according to their subject matter.\\
-
-\begin{table}[htbp]
-\begin{tabular}{|l|l|l|lllllll}
-\cline{1-3}
-comp.graphics            &                       &                        &  &  &  &  &  &  &  \\
-comp.os.ms-windows.misc  & rec.autos             & sci.crypt              &  &  &  &  &  &  &  \\
-comp.sys.ibm.pc.hardware & rec.motorcycles       & sci.electronics        &  &  &  &  &  &  &  \\
-comp.sys.mac.hardware    & rec.sport.baseball    & sci.med                &  &  &  &  &  &  &  \\
-comp.windows.x           & rec.sport.hockey      & sci.space              &  &  &  &  &  &  &  \\ \cline{1-3}
-                         & talk.politics.misc    & talk.religion.misc     &  &  &  &  &  &  &  \\
-misc.forsale             & talk.politics.guns    & alt.atheism            &  &  &  &  &  &  &  \\
-                         & talk.politics.mideast & soc.religion.christian &  &  &  &  &  &  &  \\ \cline{1-3}
-\end{tabular}
-\caption{\label{tab:widgets}Newsgroups used in newsgroups data}
-\end{table}
-
-\newpage
 \subsubsection{IMDb}
 
 The IMDb dataset is created by Meka with movie plot text summaries labelled with genres sourced from the Internet Movie Database Interface. It is a collection of 35,000 documents partitioned across 25 different genres. The task is to assign multiple genres to a movie description.
@@ -74,6 +51,51 @@ Fantasy     & 1612  & News      & 68
 \caption{\label{tab:widgets}The 24 topic categories for the IMDb dataset with the number of examples assigned to them.}
 \end{table}
 
+\subsubsection{Guardian}
+
+The Guardian is a National British daily newspaper, known until 1959 as the Manchester Guardian. Its online edition was the fifth most widely read in the world as of October 2014, with over 42 million readers. This dataset contains articles on various topics like World news, UK news, Culture, Politics, Media, Business, Society etc.
+
+All the data had been manually scrapped from the Guardian website with each file containing a document and its associated tags. The dataset in use contains 20 different classes and the task is to assign multiple tags to each news article.
+
+Below is a list of the 20 different genres.
+
+\begin{table}[htbp]
+\begin{tabular}{l|l}
+Blogging       & LGBT rights    \\
+Christianity      & Mental health \\
+Comedy     & Poetry       \\
+Computing    & Premier League \\
+Counter-terrorism policy      & Public finance   \\
+Drugs      & Public sector cuts     \\
+Financial crisis      & Research   \\
+Global enonomy   & Restaurants   \\
+Health policy & Retail industry     \\
+Inequality     & Tax and spending      
+\end{tabular}
+\caption{\label{tab:widgets}The 20 topic categories for the Guardian dataset with the number of examples assigned to them.}
+\end{table}
+
+\newpage
+\subsubsection{20 Newsgroups}
+
+The 20 Newsgroups dataset is a collection of approximately 20,000 newsgroup documents, partitioned (nearly) evenly across 20 different newsgroups. It has become a popular data set for experiments in text applications of machine learning techniques, such as text classification and text clustering.
+
+The data is organized into 20 different newsgroups, each corresponding to a different topic. Some of the newsgroups are very closely related to each other (e.g.\textbf{ comp.sys.ibm.pc.hardware / comp.sys.mac.hardware}), while others are highly unrelated (e.g \textbf{misc.forsale / soc.religion.christian}). Except for a small fraction of the articles, each document belongs to exactly one newsgroup. The task is to learn which newsgroup an article was posted to. Below is a list of 20 newsgroup partitioned according to their subject matter.\\
+
+\begin{table}[htbp]
+\begin{tabular}{|l|l|l|lllllll}
+\cline{1-3}
+comp.graphics            &                       &                        &  &  &  &  &  &  &  \\
+comp.os.ms-windows.misc  & rec.autos             & sci.crypt              &  &  &  &  &  &  &  \\
+comp.sys.ibm.pc.hardware & rec.motorcycles       & sci.electronics        &  &  &  &  &  &  &  \\
+comp.sys.mac.hardware    & rec.sport.baseball    & sci.med                &  &  &  &  &  &  &  \\
+comp.windows.x           & rec.sport.hockey      & sci.space              &  &  &  &  &  &  &  \\ \cline{1-3}
+                         & talk.politics.misc    & talk.religion.misc     &  &  &  &  &  &  &  \\
+misc.forsale             & talk.politics.guns    & alt.atheism            &  &  &  &  &  &  &  \\
+                         & talk.politics.mideast & soc.religion.christian &  &  &  &  &  &  &  \\ \cline{1-3}
+\end{tabular}
+\caption{\label{tab:widgets}Newsgroups used in newsgroups data}
+\end{table}
 
 \newpage
 \subsection{Model Performance}

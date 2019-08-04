@@ -1,8 +1,9 @@
+\newpage
 \section{Proposed Method}
 
 In this method, we propose to enhance the bag-of-words model for text classification by adding additional features to the vanilla logistic regression model. These new features will act as a regularizer which would assign similar coefficients to words used in similar context.
 
-\begin{figure}
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=16cm, height=10cm]{images/Fig3.jpg}\\
 \centering
@@ -30,7 +31,7 @@ Since words used in similar context will have similar word-vectors and by making
 
 % Our goal is to regularize the text classifier coefficients using word-vectors. However, for the thesis our objective is to learn the function $f(v^{(i)})$ and use it to regularize regression on text. \\
 
-\noindent Fig. 1 is a network diagram showing how the coefficients ($\theta_{i}$) would be obtained for a word$_{i}$ representation using both the above mentioned method.\\\\\\\\
+\noindent Fig. 1 is a network diagram showing how the coefficients ($\theta_{i}$) would be obtained for a word$_{i}$ representation using both the above mentioned method.\\
 
 \noindent We initially explore learning $\theta_{wv}^{(i)}$ through regression:\\
 
