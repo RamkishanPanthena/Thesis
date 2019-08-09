@@ -1,5 +1,45 @@
 \newpage
 \section{Analysis}
+
+Each feature of the word-vector model obtains its co-efficients from two separate sources:
+\begin{itemize}
+\item the first set of weights are trained in a similar fashion to the vanilla logistic regression model
+\item the second set of weights are learnt by enforcing a word-vector regularization
+\end{itemize}
+
+We train the model as follows:\\
+
+We initially keep word-vector weights constant at zero.
+We then find the best model performance by training only the vanilla logistic regression model through extensive hyper-parameter tuning (l1/l2 regularization).
+
+Once the vanilla feature weights have been learnt, we then start learning the word-vectors weights by increasing the l1/l2 regularization on the vanilla feature weights. This regularization would force the model to reduce the strength of the vanilla weights and move them to the unregularized word-vector weights. As the l1/l2 regularization strength per feature starts increasing, more and more weight from the vanilla model starts to shift onto the word-vector feature weights. 
+The word-vector weights are constrained by a word-vector function. So when the word-vector model weights are substantial enough, then due to the word-vector similarity property, we are able to see the weights of the rare similar words also to start having a higher weight. This boosting of the rare word-weights would help improving the performance of the model.
+
+However it is also possible that some labels better perform using the vanilla weights rather than the word-vector weights. In such a case, applying high regularization on the vanilla weights to boost the word-vector weights would be counterproductive. Thus, we need to perform extensive hyper-parameter tuning to find the right set of vanilla and word-vector weights that would work on all kinds of labels.\\
+
+We performed several experiments to find the right set of hyper-parameters. Through these experiments we noticed that if the l1 penalty on the vanilla weights was too low, then the word-vector weights wouldn't increase much at all. They would remain almost close to zero. As we applied more and more l1 penalty, the model was forced to learn through the word-vector weights. 
+
+Below is a graph showing various test results comparing l1 constraint per feature versus word-vector weights. We can see that the word-vector weights were increasing with higher L1 up to a certain point. After a certain threshold, the word-vector weights were almost non-increasing.
+
+We also compared the model performance vs L1 strength. We can clearly see that the model performance increases initially with increasing L1 regularization and after a certain threshold, we see the model performance start to go down.\\\\
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm, height=10cm]{images/graph1.png}\\
+\centering
+\caption{Graph comparing word-vector weights with increasing L1 regularization}
+\label{fig:graph1}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm, height=10cm]{images/graph2.png}\\
+\centering
+\caption{Graph comparing model performance with increasing L1 regularization}
+\label{fig:graph2}
+\end{figure}
+
+
 Upon comparing both models, we noticed that the performance of the word-vector models improved due to the additional word-vector weights.
 
 To verify this, we took the top features for each model and printed the following:
