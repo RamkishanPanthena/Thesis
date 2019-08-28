@@ -56,82 +56,147 @@ To verify this, we took the top features for each model and printed the followin
 
 The idf scores were computed to measure the rarity of the words. We noticed that the rare features which were similar to the important features now had similar weights. The below section shows such examples:
 
+\newpage
 \subsection{Examples of rare-similar words now having similar weights}
 
-In this section we show a few examples where the word-vector model is able to generate similar weights for similar words, even if some of these words are rare. The rarity of the word can be determined by their corresponding Idf score. Due to the rarity of the words, the vanilla logistic regression model did not have enough information to determine the influence of these rare words and assigned them very small weights. However the word-vector models were able to assign comparatively higher weights due to their similarity feature. \\
+In this section we show a few examples where the word-vector model is able to generate similar weights for similar words, even if some of these words are rare. The rarity of the word can be determined by their corresponding Idf score. Due to the rarity of the words, the vanilla logistic regression model did not have enough information to determine the influence of these rare words and assigned them very small weights. However the word-vector models were able to assign comparatively higher weights due to their similarity feature.
+
+\subsubsection{Example Case 1}
 
 In the below example, we can see that \textbf{marijuana} and \textbf{narcotics} are rare features based on their higher Idf scores. Inspite of that, due to their similarity with the \textbf{drug}, they have substantially higher word-vector weights. Comparatively these rare words have very small weights when trained through vanilla logistic regression model. Thus, after using the word-vector model, when these rare words do appear in the test set, they now have a higher chance of getting classified under the class \textbf{Drug}.
 
 \begin{table}[htbp]
+\centering
 \begin{tabular}{llllll}
-\multicolumn{2}{l|}{\textbf{Class: Drug}}                                  & \multicolumn{1}{l|}{\textbf{\begin{tabular}[c]{@{}l@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{l|}{\textbf{Similarity}} & \multicolumn{1}{l|}{\textbf{Idf-score}} & \textbf{\begin{tabular}[c]{@{}l@{}}wv\\ weights\end{tabular}} \\ \hline
-\multicolumn{1}{l|}{\textbf{Top-feature}} & \multicolumn{1}{l|}{cannabis}  & \multicolumn{1}{l|}{0.388}                                                              & \multicolumn{1}{l|}{1}                   & \multicolumn{1}{l|}{5.5}                & 0.159                                                         \\ \hline
-\multicolumn{1}{l|}{\textbf{Top similar}} & \multicolumn{1}{l|}{marijuana} & \multicolumn{1}{l|}{0.012}                                                              & \multicolumn{1}{l|}{0.764}               & \multicolumn{1}{l|}{6}                  & 0.126                                                         \\
-\multicolumn{1}{l|}{\textbf{features}}    & \multicolumn{1}{l|}{heroin}    & \multicolumn{1}{l|}{0.097}                                                              & \multicolumn{1}{l|}{0.694}               & \multicolumn{1}{l|}{4.86}               & 0.129                                                         \\
-\multicolumn{1}{l|}{}                     & \multicolumn{1}{l|}{narcotics} & \multicolumn{1}{l|}{-2e-5}                                                              & \multicolumn{1}{l|}{0.557}               & \multicolumn{1}{l|}{6.19}               & 0.06                                                          \\
-                                          &                                &                                                                                         &                                          &                                         &                                                              
+\multicolumn{2}{l|}{\textbf{Class: Drug}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{c|}{\textbf{Similarity}} & \multicolumn{1}{c|}{\textbf{Idf-score}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}wv\\ weights\end{tabular}}} \\ \hline
+\multicolumn{1}{l|}{\textbf{Top-feature}} & \multicolumn{1}{l|}{cannabis} & \multicolumn{1}{l|}{0.387} & \multicolumn{1}{l|}{1} & \multicolumn{1}{l|}{5.5} & 0.159 \\ \hline
+\multicolumn{1}{l|}{\textbf{Top-similar}} & \multicolumn{1}{l|}{\textbf{marijuana}} & \multicolumn{1}{l|}{\textbf{0.012}} & \multicolumn{1}{l|}{\textbf{0.764}} & \multicolumn{1}{l|}{\textbf{6.0}} & \textbf{0.126} \\
+\multicolumn{1}{l|}{\textbf{features}} & \multicolumn{1}{l|}{cocaine} & \multicolumn{1}{l|}{0.240} & \multicolumn{1}{l|}{0.694} & \multicolumn{1}{l|}{4.87} & 0.13 \\
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{\textbf{heroin}} & \multicolumn{1}{l|}{\textbf{0.097}} & \multicolumn{1}{l|}{\textbf{0.671}} & \multicolumn{1}{l|}{\textbf{4.9}} & \textbf{0.155} \\
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{substances} & \multicolumn{1}{l|}{-1e-5} & \multicolumn{1}{l|}{0.615} & \multicolumn{1}{l|}{5.69} & 0.074 \\
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{drug} & \multicolumn{1}{l|}{0.267} & \multicolumn{1}{l|}{0.613} & \multicolumn{1}{l|}{3.2} & 0.162 \\
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{\textbf{alcohol}} & \multicolumn{1}{l|}{\textbf{0.022}} & \multicolumn{1}{l|}{\textbf{0.587}} & \multicolumn{1}{l|}{\textbf{3.83}} & \textbf{0.119} \\
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{smokers} & \multicolumn{1}{l|}{1e-5} & \multicolumn{1}{l|}{0.575} & \multicolumn{1}{l|}{6.13} & 0.035 \\
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{drugs} & \multicolumn{1}{l|}{0.247} & \multicolumn{1}{l|}{0.569} & \multicolumn{1}{l|}{3.26} & 0.144 \\
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{tobacco} & \multicolumn{1}{l|}{1e-5} & \multicolumn{1}{l|}{0.559} & \multicolumn{1}{l|}{5.08} & 0.042 \\
+\multicolumn{1}{l|}{} & \multicolumn{1}{l|}{\textbf{narcotics}} & \multicolumn{1}{l|}{\textbf{-2e-5}} & \multicolumn{1}{l|}{\textbf{0.557}} & \multicolumn{1}{l|}{\textbf{6.19}} & \textbf{0.06} \\
+ &  &  &  &  &  \\
+ &  &  &  &  & 
 \end{tabular}
-\caption{\label{tab:widgets}Top feature weights comparison for Drugs}
+\caption{\label{tab:widgets}Top feature weights comparison for cannabis}
 \end{table}
 
-\newpage
+\subsubsection{Example Case 2}
 
-Here is an example which displays the vanilla and word-vector model weights for \textbf{chinese}, \textbf{shanghai} and \textbf{taiwan} which are some of the words used in similar context to \textbf{beijing}. Since \textbf{chinese} is not a rare word, we can see that its vanilla logistic regression model weight is quite high as compared to the word-vector model weight. However, when it comes across rarer words like \textbf{shanghai} and \textbf{taiwan}, its corresponding vanilla weights have dropped significantly, whereas the word-vector model weights are comparatively higher and closer to their corresponding word-vector weight of \textbf{beijing}.
+Here is an example which displays the vanilla and word-vector model weights for \textbf{chinese}, \textbf{shanghai} and \textbf{taiwan} which are some of the words used in similar context to \textbf{beijing}. Since \textbf{chinese} is not a rare word, we can see that its vanilla logistic regression model weight is quite high as compared to the word-vector model weight. However, when it comes across rarer words like \textbf{shanghai} and \textbf{taiwan}, its corresponding vanilla weights have dropped significantly, whereas the word-vector model weights are comparatively higher and closer to their corresponding word-vector weight of \textbf{beijing}. Also since the Olympics were held in \textbf{beijing} in 2008, both beijing and olympics have appeared in similar context and hence have similar word-vectors. Hence words like \textbf{olympics} and \textbf{olympic} also have high word-vector weights.
 
 \begin{table}[htbp]
-\begin{tabular}{llllll}
-\multicolumn{2}{l|}{\textbf{Class: China}}                                & \multicolumn{1}{l|}{\textbf{\begin{tabular}[c]{@{}l@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{l|}{\textbf{Similarity}} & \multicolumn{1}{l|}{\textbf{Idf-score}} & \textbf{\begin{tabular}[c]{@{}l@{}}wv\\ weights\end{tabular}} \\ \hline
-\multicolumn{1}{l|}{\textbf{Top-feature}} & \multicolumn{1}{l|}{beijing}  & \multicolumn{1}{l|}{0.252}                                                              & \multicolumn{1}{l|}{1}                   & \multicolumn{1}{l|}{4.01}               & 0.215                                                         \\ \hline
-\multicolumn{1}{l|}{\textbf{Top similar}} & \multicolumn{1}{l|}{chinese}  & \multicolumn{1}{l|}{0.376}                                                              & \multicolumn{1}{l|}{0.696}               & \multicolumn{1}{l|}{3.23}               & 0.166                                                         \\
-\multicolumn{1}{l|}{\textbf{features}}    & \multicolumn{1}{l|}{shanghai} & \multicolumn{1}{l|}{0.075}                                                              & \multicolumn{1}{l|}{0.656}               & \multicolumn{1}{l|}{5.17}               & 0.10                                                          \\
-\multicolumn{1}{l|}{}                     & \multicolumn{1}{l|}{taiwan}   & \multicolumn{1}{l|}{3e-5}                                                               & \multicolumn{1}{l|}{0.607}               & \multicolumn{1}{l|}{5.53}               & 0.073                                                         \\
-                                          &                               &                                                                                         &                                          &                                         &                                                              
+\centering
+\begin{tabular}{l|l|l|l|l|l}
+\multicolumn{2}{l|}{\textbf{Class: China}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{c|}{\textbf{Similarity}} & \multicolumn{1}{c|}{\textbf{Idf-score}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}wv\\ weights\end{tabular}}} \\ \hline
+\textbf{Top-feature} & beijing & 0.252 & 1 & 4.02 & 0.215 \\ \hline
+\textbf{Top-similar} & chinese & 0.375 & 0.696 & 3.23 & 0.166 \\
+\textbf{features} & china & 0.694 & 0.68 & 2.79 & 0.205 \\
+ & \textbf{shanghai} & \textbf{0.075} & \textbf{0.656} & \textbf{5.17} & \textbf{0.1} \\
+ & \textbf{taiwan} & \textbf{3e-5} & \textbf{0.606} & \textbf{5.53} & \textbf{0.073} \\
+ & \textbf{olympics} & \textbf{2e-5} & \textbf{0.602} & \textbf{4.2} & \textbf{0.146} \\
+ & tibet & 7e-5 & 0.6 & 5.66 & 0.09 \\
+ & \textbf{olympic} & \textbf{-1e-5} & \textbf{0.543} & \textbf{4.28} & \textbf{0.15} \\
+ & singapore & -1e-5 & 0.534 & 5.19 & 0.014 \\
+ & tokyo & -1e-5 & 0.503 & 4.68 & 0.036 \\
+ & korea & 1e-4 & 0.498 & 4.26 & 0.031
 \end{tabular}
-\caption{\label{tab:widgets}Top feature weights comparison for China}
+\caption{\label{tab:widgets}Top feature weights comparison for beijing}
 \end{table}
+
+\subsubsection{Example Case 3}
 
 Below is a similar example where \textbf{ranch} is a top feature for the class \textbf{Western}. Again we can see that the weights of rare-words \textbf{cattle}, \textbf{farm} and \textbf{sheep} have been boosted due to the word-vector model.
 
 \begin{table}[htbp]
-\begin{tabular}{llllll}
-\multicolumn{2}{l|}{\textbf{Class: Western}}                             & \multicolumn{1}{l|}{\textbf{\begin{tabular}[c]{@{}l@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{l|}{\textbf{Similarity}} & \multicolumn{1}{l|}{\textbf{Idf-score}} & \textbf{\begin{tabular}[c]{@{}l@{}}wv\\ weights\end{tabular}} \\ \hline
-\multicolumn{1}{l|}{\textbf{Top-feature}} & \multicolumn{1}{l|}{ranch}  & \multicolumn{1}{l|}{0.103}                                                              & \multicolumn{1}{l|}{1}                   & \multicolumn{1}{l|}{5.29}               & 1.216                                                         \\ \hline
-\multicolumn{1}{l|}{\textbf{Top similar}} & \multicolumn{1}{l|}{cattle} & \multicolumn{1}{l|}{0.050}                                                              & \multicolumn{1}{l|}{0.716}               & \multicolumn{1}{l|}{5.55}               & 0.878                                                         \\
-\multicolumn{1}{l|}{\textbf{features}}    & \multicolumn{1}{l|}{farm}   & \multicolumn{1}{l|}{-4e-5}                                                               & \multicolumn{1}{l|}{0.705}               & \multicolumn{1}{l|}{4.24}               & 0.486                                                         \\
-\multicolumn{1}{l|}{}                     & \multicolumn{1}{l|}{sheep}  & \multicolumn{1}{l|}{-3e-5}                                                               & \multicolumn{1}{l|}{0.591}               & \multicolumn{1}{l|}{6.03}               & 0.314                                                         \\
-                                          &                             &                                                                                         &                                          &                                         &                                                              
+\centering
+\begin{tabular}{l|l|l|l|l|l}
+\multicolumn{2}{l|}{\textbf{Class: Western}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{c|}{\textbf{Similarity}} & \multicolumn{1}{c|}{\textbf{Idf-score}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}wv\\ weights\end{tabular}}} \\ \hline
+\textbf{Top-feature} & ranch & 0.104 & 1 & 5.29 & 1.217 \\ \hline
+\textbf{Top-similar} & \textbf{cattle} & \textbf{0.05} & \textbf{0.716} & \textbf{5.55} & \textbf{0.878} \\
+\textbf{features} & \textbf{farm} & \textbf{4e-5} & \textbf{0.705} & \textbf{4.24} & \textbf{0.486} \\
+ & rancher & -4e-5 & 0.702 & 5.96 & 0.844 \\
+ & \textbf{cowboy} & \textbf{-1e-5} & \textbf{0.624} & \textbf{5.71} & \textbf{0.722} \\
+ & farmer & -4e-5 & 0.606 & 5.04 & 0.404 \\
+ & \textbf{sheep} & \textbf{-3e-5} & \textbf{0.591} & \textbf{6.03} & \textbf{0.314} \\
+ & plantation & -2e-6 & 0.59 & 6.23 & 0.085 \\
+ & \textbf{texas} & \textbf{-1e-5} & \textbf{0.579} & \textbf{4.67} & \textbf{0.919} \\
+ & county & -3e-5 & 0.579 & 5.3 & 0.25 \\
+ & farmhouse & -4e-6 & 0.578 & 6.07 & 0.051
 \end{tabular}
-\caption{\label{tab:widgets}Top feature weights comparison for West}
+\caption{\label{tab:widgets}Top feature weights comparison for ranch}
 \end{table}
+
+
 
 The above examples do help in proving that our model was successfully able to use word-vectors as a regularizer to assign similar weights to similar words even if those similar words happen to be rare.
 
 \newpage
 \subsection{Scenarios when word-vector model doesn't work}
 
+In this section we show an example that highlights the major drawback of word-vectors - they presume that a word's meaning is stable across sentences. As we know this approach to word representation does not address the co-existence of many possible meanings for a given word or phrase.
+
+\subsubsection{Example Case 1}
+
+From the below example, we can see \textbf{west} is one of the top feature for the class \textbf{Western} and it has high vanilla and word-vector weights. However since the word-vectors consider west as a direction(noun), other directions which are used in similar contexts now have higher word-vector weights. So when any of the features such as \textbf{north}, \textbf{east} or \textbf{south} appear in the train or testset, there is a higher chance the word-vector model may misclassify the document to belong to the \textbf{Western} class leading to more false positives. Out of all the top most similar features to west, \textbf{texas} is the only feature which is more relevant to the class we are trying to predict. We do observe expected performance from the word-vector model generating high word-vector weights even though its vanilla weights are negligible.
+
 \begin{table}[htbp]
-\begin{tabular}{llllll}
-\multicolumn{2}{l|}{\textbf{Class: Western}}                           & \multicolumn{1}{l|}{\textbf{\begin{tabular}[c]{@{}l@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{l|}{\textbf{Similarity}} & \multicolumn{1}{l|}{\textbf{Idf-score}} & \textbf{\begin{tabular}[c]{@{}l@{}}wv\\ weights\end{tabular}} \\ \hline
-\multicolumn{1}{l|}{\textbf{Top-feature}} & \multicolumn{1}{l|}{west}  & \multicolumn{1}{l|}{0.224}                                                              & \multicolumn{1}{l|}{1}                   & \multicolumn{1}{l|}{3.95}               & 0.981                                                         \\ \hline
-\multicolumn{1}{l|}{\textbf{Top similar}} & \multicolumn{1}{l|}{north} & \multicolumn{1}{l|}{-4e-5}                                                              & \multicolumn{1}{l|}{0.823}               & \multicolumn{1}{l|}{4.06}               & 0.38                                                          \\
-\multicolumn{1}{l|}{\textbf{features}}    & \multicolumn{1}{l|}{east}  & \multicolumn{1}{l|}{-3e-5}                                                              & \multicolumn{1}{l|}{0.822}               & \multicolumn{1}{l|}{4.26}               & 0.297                                                         \\
-\multicolumn{1}{l|}{}                     & \multicolumn{1}{l|}{south} & \multicolumn{1}{l|}{5e-5}                                                               & \multicolumn{1}{l|}{0.821}               & \multicolumn{1}{l|}{3.72}               & 0.232                                                         \\
-                                          &                            &                                                                                         &                                          &                                         &                                                              
+\centering
+\begin{tabular}{l|l|l|l|l|l}
+\multicolumn{2}{l|}{\textbf{Class: Western}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{c|}{\textbf{Similarity}} & \multicolumn{1}{c|}{\textbf{Idf-score}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}wv\\ weights\end{tabular}}} \\ \hline
+\textbf{Top-feature} & west & 0.224 & 1 & 3.95 & 0.981 \\ \hline
+\textbf{Top-similar} & north & -4e-5 & 0.823 & 4.06 & 0.38 \\
+\textbf{features} & east & -3e-5 & 0.822 & 4.26 & 0.297 \\
+ & south & 5e-5 & 0.821 & 3.72 & 0.233 \\
+ & southwestern & 1e-5 & 0.731 & 6.75 & 0.098 \\
+ & northwestern & 1e-5 & 0.704 & 6.93 & 0.123 \\
+ & southern & -3e-5 & 0.688 & 4.77 & 0.308 \\
+ & eastern & 2e-5 & 0.633 & 5.14 & -0.015 \\
+ & northern & 1e-5 & 0.633 & 4.94 & 0.022 \\
+ & central & -4e-5 & 0.614 & 4.76 & -0.075 \\
+ & \textbf{texas} & \textbf{-1e-5} & \textbf{0.612} & \textbf{4.67} & \textbf{0.919}
 \end{tabular}
+\caption{\label{tab:widgets}Top feature weights comparison for west}
 \end{table}
 
+\newpage
 \subsection{Scenarios when word-vector model works because of word-vector coefficients not because of similarity}
 
+In this section we look at a few more examples of polysemy - same word having different meaning. For such cases we were expecting the corresponding word-vector weights to be high for similar but non-relevant words. But since the word-vector weights were trained on a specific dataset, they managed to train the word-vector coefficients in such a way that similar but non-relevant words got an almost zero word-vector weight.
+
+\subsubsection{Example Case 1}
+
+Below is one of the top feature \textbf{amazon} trained for the label \textbf{Brazil}. Here \textbf{amazon}  refers to the largest river in South America that flows through \textbf{Brazil}. It does not refer to the multinational technology company Amazon that focuses on e-commerce and digital streaming. However as seen below the top words for amazon are kindle, ebooks, itunes and download. These top words are however are relevant to the classfication problem we're trying to solve in this case. One may expect the word-vector model to generate similar weights for these words, but since the 300 dimensional word-vector coefficients were trained on this particular label, we see that it managed to assign the weights in such a way that these non-relevant words have an almost zero word-vector weight.
+
+We can also see that \textbf{rainforest} is the only relevant word that is more relevant to this context and it got a higher word-vector weight even tough it had much lower similarity to amazon as compared to the other words like kindle, ebooks etc.
+
 \begin{table}[htbp]
-\begin{tabular}{llllll}
-\multicolumn{2}{l|}{\textbf{Class: Brazil}}                                 & \multicolumn{1}{l|}{\textbf{\begin{tabular}[c]{@{}l@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{l|}{\textbf{Similarity}} & \multicolumn{1}{l|}{\textbf{Idf-score}} & \textbf{\begin{tabular}[c]{@{}l@{}}wv\\ weights\end{tabular}} \\ \hline
-\multicolumn{1}{l|}{\textbf{Top-feature}} & \multicolumn{1}{l|}{amazon}     & \multicolumn{1}{l|}{0.086}                                                              & \multicolumn{1}{l|}{1}                   & \multicolumn{1}{l|}{4.3}                & 0.146                                                         \\ \hline
-\multicolumn{1}{l|}{\textbf{Top similar}} & \multicolumn{1}{l|}{kindle}     & \multicolumn{1}{l|}{-4e-5}                                                              & \multicolumn{1}{l|}{0.699}               & \multicolumn{1}{l|}{5.96}               & 0.037                                                         \\
-\multicolumn{1}{l|}{\textbf{features}}    & \multicolumn{1}{l|}{ebooks}     & \multicolumn{1}{l|}{-1e-5}                                                              & \multicolumn{1}{l|}{0.655}               & \multicolumn{1}{l|}{6.51}               & 0.004                                                         \\
-\multicolumn{1}{l|}{}                     & \multicolumn{1}{l|}{rainforest} & \multicolumn{1}{l|}{1e-5}                                                               & \multicolumn{1}{l|}{0.521}               & \multicolumn{1}{l|}{5.32}               & 0.13                                                          \\
-                                          &                                 &                                                                                         &                                          &                                         &                                                              
+\centering
+\begin{tabular}{l|l|l|l|l|l}
+\multicolumn{2}{l|}{\textbf{Class: Brazil}} & \multicolumn{1}{c|}{\textbf{\begin{tabular}[c]{@{}c@{}}vanilla\\ weights\end{tabular}}} & \multicolumn{1}{c|}{\textbf{Similarity}} & \multicolumn{1}{c|}{\textbf{Idf-score}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}wv\\ weights\end{tabular}}} \\ \hline
+\textbf{Top-feature} & amazon & -3e-5 & 1 & 4.3 & 0.202 \\ \hline
+\textbf{Top-similar} & kindle & -8e-6 & 0.699 & 5.96 & 0.06 \\
+\textbf{features} & ebooks & -6e-5 & 0.655 & 6.51 & 0.011 \\
+ & ebook & 6e-6 & 0.643 & 6.38 & 0.2 \\
+ & itunes & -6e-5 & 0.628 & 4.8 & 5e-04 \\
+ & ebay & -2e-05 & 0.598 & 5.08 & 0.015 \\
+ & downloads & 6e-5 & 0.584 & 4.85 & -8e-04 \\
+ & google & 2e-5 & 0.555 & 3.12 & -0.046 \\
+ & download & -5e-6 & 0.54 & 3.95 & 3e-02 \\
+ & paypal & -6e-5 & 0.531 & 6.5 & 0.023 \\
+ & \textbf{rainforest} & \textbf{4e-5} & \textbf{0.52} & \textbf{5.33} & \textbf{0.167}
 \end{tabular}
+\caption{\label{tab:widgets}Top feature weights comparison for amazon}
 \end{table}
+
+\iffalse
+\newpage
+\subsubsection{Example Case 2}
 
 \begin{table}[htbp]
 \begin{tabular}{llllll}
@@ -143,3 +208,4 @@ The above examples do help in proving that our model was successfully able to us
                                           &                                  &                                                                                         &                                          &                                         &                                                              
 \end{tabular}
 \end{table}
+\fi
