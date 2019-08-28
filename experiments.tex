@@ -325,7 +325,7 @@ Looking at another label \textbf{Global economy}, which has 605 train and 72 tes
 
 Analyzing a label from the bottom of the table we see that the logistic regression model already had a very high train F1 score and the word-vector model was not able to improve much on this.
 
-\begin{table}[htbp]
+\begin{table}[h]
 \centering
 \begin{tabular}{l|c|c|c|c|c|}
  & \textbf{F1} & \textbf{TN} & \textbf{FP} & \textbf{FN} & \textbf{TP} \\ \hline
@@ -335,7 +335,7 @@ Analyzing a label from the bottom of the table we see that the logistic regressi
 \caption{\label{tab:widgets}Vanilla logistic regression train-test performance on \textbf{Christianity} Label.}
 \end{table}
 
-\begin{table}[htbp]
+\begin{table}[h!]
 \centering
 \begin{tabular}{l|c|c|c|c|c|}
  & \textbf{F1} & \textbf{TN} & \textbf{FP} & \textbf{FN} & \textbf{TP} \\ \hline
@@ -414,7 +414,7 @@ comp.graphics              & 51.81                                              
 \end{table}
 
 \begin{table}[htbp]
-\centring
+\centering
 \begin{tabular}{l|c|c|c|}
 \multicolumn{1}{c|}{Label} & \begin{tabular}[c]{@{}c@{}}Tensorflow LR\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Our Model\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Percentage \\ Improvement\end{tabular} \\ \hline
 comp.windows.x             & 67                                                               & 71                                                           & 4                                                                 \\
