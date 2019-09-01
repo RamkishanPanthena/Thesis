@@ -114,6 +114,36 @@ w^{(h)(i)} = \theta_{lr}^{(h)(i)} + \theta_{wv}^{(h)(i)}
 
 Computing the weights through forward propagation and updating the weights through back propagation would be similar to the previous model.
 
+\subsection{Convolutional Neural Networks}
+
+Convolutional Neural Network models are one of the most exciting developments in machine learning in recent years. It has mainly been used for image classification and computer vision by being able to extract features from images and use them in neural networks.
+
+A CNN has multiple layers called convolutional layers. In case of images, these convolutional layers are able to detect edges, corners and other textures. This same process can be applied to one-dimensional sequence of data. When we work with sequential data, like text, we work with one dimensional convolutions. The model extracts features from sequence data and maps the internal features of the sequence.
+
+\subsubsection{Pre-processing and Model training}
+
+\begin{itemize}
+
+\item{CNNs require input to have a static size and the document lengths can vary greatly. To counter this, we can apply padding that simply pads the sequence of words with zeros. Additionally we should also limit the number of words in each document by using a fixed size.}
+
+\item{We applied a 1d Convolutional layer with 128 filters with a sliding window size of 5. A 1D CNN is very effective for deriving features from a fixed-length segment of the overall dataset, where the feature location is not so important.}
+
+\item{We also applied pooling to the incoming feature vector. A pooling layer (MaxPool, AveragePool) acts as a way to downsample the input vector. For max pooling, we take the maximum value of all features in the pool for each feature dimension. For average pooling, one would take the average. But in general max pooing is more commonly used as it highlights large values. Global max/average pooling takes the max/average of all features without having to define the pool size. For our experiment, we will be using GlobalMaxPooling.}
+
+\item{The output of the pooling layer is then passed through a fully connected layer which is then passed through a sigmoid/softmax layer depending on whether it is a multi-label/multi-class classification problem.}
+
+\item{We also added dropout layers in our neural network architecture. Dropout limits overfitting by randomly ignoring certain set of neurons by not considering them during a particular forward or backward pass. This helps to reduce overfitting similar to regularization in machine learning.}
+
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm, height=8cm]{images/cnn.png}\\
+\centering
+\caption{Outline of our CNN model structure}
+\label{fig:foo}
+\end{figure}
+
 \newpage
 \subsection{Model Performance}
 

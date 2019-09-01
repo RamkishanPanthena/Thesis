@@ -1,5 +1,49 @@
+\newpage
+\section{Initial models tested}
 
-\section{Other models tested - Vanilla logistic regression with word-vector regularization}
+\subsection{Document embedding by averaging word-vectors}
+
+We initially tried a basic scenario where documents are represented by a fixed length vector which can then be used for classification even though each document can be of a different length.
+
+One of the common techniques to generate new embeddings to documents is by using an existing pre-trained word embeddings by averaging the word vectors to create a single fixed size embedding vector.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm, height=8cm]{images/average-vectors.png}\\
+\centering
+\caption{Average word-vectors}
+\label{fig:foo}
+\end{figure}
+
+\subsubsection{Steps to compute fixed embedding vector}
+
+\begin{itemize}
+\item {First we import a word vector model that either has been pre-trained by Google or retrained on the training data to obtain domain specific word vectors.}
+\item {Then we iterate over the entire corpus and generate a mean vector for each document.}
+\end{itemize}
+Once we obtain the mean vector for all the documents, we train a vanilla logistic regression model using the thus generated fixed embedding feature matrix.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm, height=8cm]{images/average-vectors2.png}\\
+\centering
+\caption{Average word-vectors model}
+\label{fig:foo}
+\end{figure}
+
+\newpage
+\subsection{Initial word-vector model}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm, height=8cm]{images/init-wv.png}\\
+\centering
+\caption{Initial word-vectors model}
+\label{fig:foo}
+\end{figure}
+
+\newpage
+\subsection{Vanilla logistic regression with word-vector regularization}
 
 Our proposed method trained a model using coefficients trained from both the vanilla logistic regression model and word-vectors. In this model, instead of generating the feature weights using the word-vectors, we use the word-vectors as a regularizer that is added to the cost function. This regularizer would add a higher penalty to similar words having large differences in their corresponding feature weights. This kind of regularization should technically enforce similar words to have similar weights.
 
@@ -50,7 +94,7 @@ where $\lambda_{1}, \lambda_{2}, \lambda_{3}$ and l1, l2 and word-vector regular
 \label{fig:foo}
 \end{figure}
 
-\subsection{Why would it work?}
+\subsubsection{Why would it work?}
 
 Let's say there are two words "Russia" and "Soviet" having similar word-vectors due to their reference in similar context. However the word "Russia" is present in the text more often than "Soviet" and has higher feature weight. Due to their high similarity and larger difference in weights, the word-vector model will add a higher penalty to the cost function until their corresponding weights are close to each other.
 
@@ -66,7 +110,7 @@ Now the claim is that the cost function would be minimized if the word-vector pe
     \end{itemize}
 \end{itemize}
 
-\subsection{Challenges faced and workarounds}
+\subsubsection{Challenges faced}
 
 The major challenge faced while running this model is the amount of time it took to generate the weight differences matrix and computing its dot product with the similarity matrix. Since the model was trained using mini-batch gradient descent, we had to compute the word-vector regularization cost at the end of every mini-batch in order to update the weights. 
 
@@ -84,8 +128,9 @@ Inverse docment frequency or IDF is a numerical statistic used in information re
 
 Once we decide on the total number of top rare features, the rest of the steps remain same as before with the only change being that we compute the cosine similarity and difference in coefficients matrix for only these top features and add the resulting value as the word-vector regularization cost.
 
+\iffalse
 \newpage
-\subsection{Model Performance}
+\subsubsection{Model Performance}
 
 Below is a table showing how our model performed as compared to the pyramid and tensorflow implementation of vanilla logistic regression.
 
@@ -110,3 +155,5 @@ IMDb        & 56.14                                                            &
 \end{table}
 
 Based on the above model performance, we can see that the word-vector regularization model did not perform that well as compared to the vanilla logistic regression model. This could be due to the fact that there our model was restricted by the total number of rare features we could use to regularize the model along with the added regularization constraint.
+
+\fi
