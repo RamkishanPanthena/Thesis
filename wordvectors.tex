@@ -23,9 +23,9 @@ This choice of word-representation is simple, robust and can act as a good basel
 \newpage
 \subsection{History of word-embeddings}
 
-The technique of representing words as vectors has roots in the 1960s with the development of vector space models for information retrieval. Reducing the number of dimensions using singular value decompostitoin led to the introduction of latent semantic analysis in the late 1980s. In 2001, Bengio et al. published a paper to tackle language modeling and it was the initial idea of word-embedding. At that time, they named this process as "learning a distributed representaion for words".
+The technique of representing words as vectors has roots in the 1960s with the development of vector space models for information retrieval. Reducing the number of dimensions using singular value decompostitoin led to the introduction of latent semantic analysis in the late 1980s. In 2001, Bengio et al. \cite{bengio2003neural} published a paper to tackle language modeling and it was the initial idea of word-embedding. At that time, they named this process as "learning a distributed representaion for words".
 
-In 2008, Ronan and Jason introduced a concept of pre-trained model and showed its amazing approach for solving NLP problems. In 2013, a team at Google led by Tomas Mikolov created word2vec, a word-embedding toolkit which can train vector space models faster than the previous approaches. Later on, gensim provided an amazing wrapper so that adopt different pre-trained word-embedding models which include Word2Vec (by Google), GloVe (by Stanford), fastText (by Facebook).
+In 2008, Ronan and Jason \cite{collobert2008unified} introduced a concept of pre-trained model and showed its amazing approach for solving NLP problems. In 2013, a team at Google led by Tomas Mikolov created word2vec \cite{mikolov2013efficient}, a word-embedding toolkit which can train vector space models faster than the previous approaches. Later on, gensim provided an amazing wrapper so that adopt different pre-trained word-embedding models which include Word2Vec (by Google), GloVe \cite{pennington2014glove} (by Stanford), fastText (by Facebook).
 
 \subsection{Word-vector training}
 
@@ -82,7 +82,7 @@ In the previous example of the sentence, "The quick brown fox jumps over the laz
 
 \noindent\textbf{Negative Sampling:}\\
 
-Instead of every training sample tweaking all the weights of the neural network, we can modify only a small percentage of weights, rather than all of them. With negative sampling, we are going to randomly select a small number of negative weights to update along with updating all the positive weights. The negative samples are selected using a unigram distribution, where frequent words are more likely to be selected as negative samples. Thus the probability of picking the word as part of a negative sample to update will depend on the number of times the word appears in the corpus divided by the total number of words in the corpus. This is expressed by the following equation:
+Instead of every training sample tweaking all the weights of the neural network, we can modify only a small percentage of weights, rather than all of them. With negative \cite{goldberg2014word2vec}, we are going to randomly select a small number of negative weights to update along with updating all the positive weights. The negative samples are selected using a unigram distribution, where frequent words are more likely to be selected as negative samples. Thus the probability of picking the word as part of a negative sample to update will depend on the number of times the word appears in the corpus divided by the total number of words in the corpus. This is expressed by the following equation:
 
 \begin{equation}
 P(w_{i}) = \frac{f(w_{i})}{\sum_{j=0}^{n}f(w_{j})}
@@ -125,7 +125,7 @@ In other words, we can subtract one meaning from the word vector for king (i.e. 
 
 The current implementation of word vectors is limited to its unigram natural behavior. It does not embed bigrams like "American Airlines" as its whole. In some cases, a word pair like "Boston Globe" (a newspaper) has a much different meaning than the individual words "Boston" and "Globe". So it makes sense to treat "Boston Globe" as a single term whenever it occurs when its own word vector representation.
 
-However, the addition of phrases to the model will exponentially increase the vocabulary size. The word2vec team have built a tool that counts the number of times each combination of two words appears in the training text, and use it in an equation to determine which word combinations turn into phrases. The equation is designed to make phrases out of words which occur together often relative to the number of individual occurrences. It also favors phrases made of infrequent words in order to avoid making phrases out of common words like "and the" or "this is".
+However, the addition of phrases to the model will exponentially increase the vocabulary size. The word2vec team have built a tool that counts the number of times each combination of two words appears in the training text, and use it in an equation to determine which word combinations turn into phrases \cite{mikolov2013distributed}. The equation is designed to make phrases out of words which occur together often relative to the number of individual occurrences. It also favors phrases made of infrequent words in order to avoid making phrases out of common words like "and the" or "this is".
 
 The same word2vec idea can be extended to sentences and complete documents where instead of learning feature representation for words, you learn it for sentences or documents. The applications of these models could depend on the task at hand. A word2vec model can effectively capture semantic relationship between words and hence it can be used to calculate word similarities or fed as features to various NLP tasks such as sentiment analysis, LSTMs etc. However words can only capture so much, there are times when you need relationships between sentences and documents and not just words. For example, if you are trying to figure out if two documents are duplicates of each other.
 
@@ -156,15 +156,15 @@ Though pre-trained word embeddings have been very influential, they have a major
 
 \noindent \textbf{Embeddings from Language Models (ELMo)}\\
 
-The motivation for ELMo is that word embeddings should incorporate both word-level characteristics as well as contextual semantics. So instead of taking just the final layer of deep bi-LSTM language model as the word representation, ELMo embeddings are a function of all internal layers of bi-LSTM. The intutition is that higher level states of the bi-LSTM capture context, while lower level captures syntax. Thus, instead of using a fixed embedding for each word, ELMo looks at the entire sentence before assigning each word an embedding thus generating different embeddings for each of its occurence.
+The motivation for ELMo \cite{peters2018deep} is that word embeddings should incorporate both word-level characteristics as well as contextual semantics. So instead of taking just the final layer of deep bi-LSTM language model as the word representation, ELMo embeddings are a function of all internal layers of bi-LSTM. The intutition is that higher level states of the bi-LSTM capture context, while lower level captures syntax. Thus, instead of using a fixed embedding for each word, ELMo looks at the entire sentence before assigning each word an embedding thus generating different embeddings for each of its occurence.
 
 \newpage
 \noindent \textbf{Open AI GPT (Generative Pre-training Transformer)}\\
 
-Open AI GPT is similar to ELMo, with a few differences. Firstly while ELMo uses Bi-LSTMs, GPT is a multi-layer encoder-decoder model with attention mechanism. Secondly while ELMo feeds embeddings into models for customized tasks, GPT fine tunes the same base model for all tasks.
+Open AI GPT \cite{radford2018improving} is similar to ELMo, with a few differences. Firstly while ELMo uses Bi-LSTMs, GPT is a multi-layer encoder-decoder model with attention mechanism. Secondly while ELMo feeds embeddings into models for customized tasks, GPT fine tunes the same base model for all tasks.
 
 However, one drawback of the GPT is its uni-directional nature - the model is only trained to predict the future left-to-right context.\\
 
 \noindent \textbf{Bidirectional Encoder Representations from Transformers (BERT)}\\
 
-BERT is a direct descendent to GPT — train a large language model on free text and then fine-tune on specific tasks without customized network architectures. Compared to GPT, the largest difference and improvement of BERT is to make training bi-directional. The model learns to predict both context on the left and right. The model architecture of BERT is a multi-layer bi-directional Transformer encoder.
+BERT \cite{devlin2018bert} is a direct descendent to GPT — train a large language model on free text and then fine-tune on specific tasks without customized network architectures. Compared to GPT, the largest difference and improvement of BERT is to make training bi-directional. The model learns to predict both context on the left and right. The model architecture of BERT is a multi-layer bi-directional Transformer encoder.

@@ -34,6 +34,22 @@ Once we obtain the mean vector for all the documents, we train a vanilla logisti
 \newpage
 \subsection{Initial word-vector model}
 
+For our initial word-vector model, we built a network where the coefficients are only a function of its word representation ($v^{(i)}$), without the logistic regression weights, i.e.,
+
+\begin{equation}\label{lb1}
+\theta^{(i)} = \theta_{wv}^{(i)}
+\end{equation}
+
+These weights as mentioned in Chapter 3, will be learnt through the word representation of the features using a linear regressor, which will then be passed through a sigmoid/softmax function for classfication i.e.,
+
+\begin{equation}
+\theta_{wv}^{(i)} = w_{1}v_{1}^{(i)} + w_{2}v_{2}^{(i)} + ... + w_{d}v_{d}^{(i)} = \sum_{d=1}^{D} w_{d}^{(i)}v_{d}^{(i)}
+\end{equation}
+
+where, $w = (w_{1}, w_{2}, ..., w_{d})$ are the parameters of the regression function. 
+
+$\quad\qquad\  v= (v_{1}, v_{2}, ..., v_{d})$ are d-dimensional word-representations of word $i$\\
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=16cm, height=8cm]{images/init-wv.png}\\
@@ -84,8 +100,6 @@ where $\lambda_{1}, \lambda_{2}, \lambda_{3}$ and l1, l2 and word-vector regular
 
 \end{itemize}
 
-\newpage
-
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=16cm, height=10cm]{images/model3.png}\\
@@ -94,6 +108,7 @@ where $\lambda_{1}, \lambda_{2}, \lambda_{3}$ and l1, l2 and word-vector regular
 \label{fig:foo}
 \end{figure}
 
+\newpage
 \subsubsection{Why would it work?}
 
 Let's say there are two words "Russia" and "Soviet" having similar word-vectors due to their reference in similar context. However the word "Russia" is present in the text more often than "Soviet" and has higher feature weight. Due to their high similarity and larger difference in weights, the word-vector model will add a higher penalty to the cost function until their corresponding weights are close to each other.
@@ -116,6 +131,7 @@ The major challenge faced while running this model is the amount of time it took
 
 So for a medium sized dataset with 10,000 features, 100,000 records and a decent batch size of 10\% of training data, one would have to compute these matrices and get their dot product at least 10 times. And that would train the model for just a single epoch. For training a good enough model with a decent learning rate, one would need to train the model for at least 400-500 epochs. All of this only if we are training a binary classifier. If we are training a multi-class or multi-label classifier with $\sim$2000 different classes, then it would take an exponential amount of time. This puts a huge constraint on the amount of time and resources needed to train the model. For training an even larger dataset with $\sim$100,000 features, it would be even more difficult as training a single epoch itself might take a few hours.
 
+\newpage
 \subsubsection{Workarounds}
 
 In order to remediate this, we limit the features for which we want to increase the weights. Since our objective through this project was to make rare features have higher weights, we can pick the top k rarest features and look at their similarities with the rest of the features. This would reduce the similarity matrix size from $(n$ x $n)$ to $(n$ x $k)$. We can choose the top rare features based on their IDF (Inverse Document Frequency) score.
