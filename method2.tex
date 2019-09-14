@@ -1,5 +1,5 @@
 \newpage
-\section{Proposed Method}
+\chapter{Proposed Method}
 
 In this method, we propose to enhance the bag-of-words model for text classification by adding additional features to the vanilla logistic regression model. These new features will act as a regularizer which would assign similar coefficients to words used in similar context.
 
@@ -98,6 +98,11 @@ Cost(h_{(\theta| w)}(x), y) =
 
 % \section{Implementation}
 
+\section{CNN compared with the modified model}
+
+We now compare the CNN network to the modified word-vector model, where the feature coefficients are a linear sum of the logistic regression weights and the weights constrained through the word vector representation. Without the vanilla logistic regression weights, the model would be same as the previous 1D CNN network. For this network, we would have to incorporate these vanilla weights to the output of the sum pooling layer before applying the sigmoid/softmax function. For this we would need a different kind of pooling layer that would sum both the pair of weights, i.e, the free vanilla weights and the word-vector weights.
+
+\section{Experimental setup}
 \subsection{Obtain word-vectors}
 
 Out of the successful deep learning models used for word-embeddings, two of the most popular ones are Word2Vec \cite{le2014distributed} and Global Vectors \cite{pennington2014glove}. For our research, we will be using Google's Word2Vec which has pre-trained word-vectors with 300 dimensions trained using over 100 billion words. 

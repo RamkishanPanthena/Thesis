@@ -1,8 +1,8 @@
-\section{Introduction}
+\chapter{Introduction}
 
 The goal of text classification is to classify text documents into one or more classes according to their content. For this purpose, a document must be transformed into a representation which is suitable for the learning algorithm and the classification task. Representing documents as bag-of-words is a commonly used method in document classification where the frequency of occurrence of each word is used as a feature for training a classifier. However, one should note that when using this representation, some document information is lost as the model disregards grammar and word ordering.
 
-\subsection{Problem Statement}
+\section{Problem Statement}
 
 Although the bag-of-words model is widely used and performs exceptionally well in most text classification problems, it contains several limitations. As per Zipf's law \cite{li1992random}, given a large sample of words used, the frequency of any word is inversely proportional to its rank in the frequency table. So, word number n has a frequency proportional to 1/n. Thus, a large vocabulary can cause extremely sparse representations. 
 
