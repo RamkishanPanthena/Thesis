@@ -1,5 +1,5 @@
 \newpage
-\section{Experiments}
+\chapter{Experiments}
 
 % \section{Baseline}
 
@@ -7,7 +7,7 @@ We compare our model to the vanilla logistic regression algorithm by implementin
 
 We tune our model using learning rate and regularization parameter as hyper-parameters and train with different number of epochs till the loss converges. For multi-label problems, we also use prediction threshold as one of the hyper-parameters to list labels with probabilities greater than the threshold value.
 
-\subsection{Evaluation}
+\section{Evaluation}
 
 To evaluate the performance of both models for multi-class problems, we use accuracy and F1 measures.
 
@@ -25,8 +25,8 @@ label \mbox{-} F1 & = \frac{1}{N} \sum_{n=1}^{N} \frac{2\sum_{n=1}^{N} {y^{(n)}_
 
 \noindent where for each instance $n$, $y^{(n)}_{l}$ = 1 if label $l$ is a given label in ground truth; \\
 $\hat{y}^{(n)}_{l}$ = 1 if label $l$ is a predicted label.
-\newpage
-\subsection{IMDb}
+
+\section{IMDb}
 
 The IMDb dataset is created by Meka with movie plot text summaries labelled with genres sourced from the Internet Movie Database Interface. It is a collection of 35,000 documents partitioned across 25 different genres. The task is to assign multiple genres to a movie description.
 
@@ -48,51 +48,61 @@ Documentary & 1895 & Music & 827 &  &
 \caption{\label{tab:widgets}The 24 topic categories for the IMDb dataset with the number of examples assigned to them.}
 \end{table}
 
-\subsubsection{Model Performance on IMDb}
+We evaluate how the model performed on the IMDb dataset by comparing its performance with the vanilla logistic regression model. We compare both the overall model performance as well as the individual label performance.
 
-We evaluate how the model performed on the IMDb dataset by comparing its performance with the vanilla logistic regression model. We compare both the overall model performance as well as the individual label performance.\\
+\subsection{Overall Model Performance}
 
-\noindent \textbf{Individual Label Performance}\\
+We initially look at how the overall model performed. Since each document in the IMDb dataset can belong to multiple genres, we're trying to solve a multi-label classification problem. For multi-label classification, as discussed previously in equation \ref{eq:eval}, we will use Set-Accuracy and Instance-F1 measures to evaluate the model. Along with evaluating the model on the vanilla logistic regression and our word-vector model, we also evaluate the model on pyramid's version of logistic regression. Below is how each of the model's performed.
+
+Looking at the results, we can see that our model has outperformed both the pyramid and vanilla logistic regression models on both Set-Accuracy and Instance-F1.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{l|c|c}
+IMDb & \textbf{Set Accuracy} & \textbf{Instance F1} \\ \hline
+\textbf{Mean wv embedding} & 7.3 & 45.2 \\
+\textbf{WV model (initial)} & 6.1 & 45.69 \\
+\textbf{LR + WV Reg} & 17.19 & 56.32 \\
+\textbf{Pyramid LR} & 19.66 & 56.14 \\
+\textbf{Tensorflow LR} & 18.21 & 57.87 \\
+\textbf{Our model} & 20.30 & 58.52
+\end{tabular}
+\caption{\label{tab:widgets}Set-Accuracy and Instance-F1 Results for IMDb dataset.}
+\end{table}
+
+\newpage
+\subsection{Individual Label Performance}
 
 Below is a table showing the individual label performance between both models which has been sorted in descending order of its performance improvement.\\
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{l|c|c|c|}
-\multicolumn{1}{c|}{Label} & \begin{tabular}[c]{@{}c@{}}Tensorflow LR\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Our Model\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Percentage \\ Improvement\end{tabular} \\ \hline
-News                       & 0.00                                                                & 50.00                                                           & 50.00                                                             \\
-Musical                    & 33.54                                                               & 43.78                                                           & 10.24                                                             \\
-Animation                  & 44.66                                                               & 50.23                                                           & 5.57                                                              \\
-Sport                      & 61.65                                                               & 67.13                                                           & 5.47                                                              \\
-Film Noir                  & 25.31                                                               & 30.23                                                           & 4.91                                                              \\
-War                        & 58.64                                                               & 62.92                                                           & 4.27                                                              \\
-Sci-Fi                     & 68.83                                                               & 72.73                                                           & 3.89                                                             
-\end{tabular}
-\caption{\label{tab:widgets}IMDb Model Performance at a Label level.}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{l|c|c|c|}
-\multicolumn{1}{c|}{Label} & \begin{tabular}[c]{@{}c@{}}Tensorflow LR\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Our Model\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Percentage \\ Improvement\end{tabular} \\ \hline
-Adventure                  & 52.44                                                               & 56.14                                                           & 3.7                                                               \\
-Music                      & 54.08                                                               & 56.98                                                           & 2.9                                                               \\
-Crime                      & 60.24                                                               & 62.72                                                           & 2.48                                                              \\
-Documentary                & 71.05                                                               & 73.36                                                           & 2.31                                                              \\
-Short                      & 56.06                                                               & 58.23                                                           & 2.17                                                              \\
-Family                     & 51.07                                                               & 53.21                                                           & 2.14                                                              \\
-Comedy                     & 62.87                                                               & 64.67                                                           & 1.8                                                               \\
-Romance                    & 51.17                                                               & 52.5                                                            & 1.33                                                              \\
-Fantasy                    & 41.96                                                               & 43.05                                                           & 1.09                                                              \\
-Mystery                    & 47.91                                                               & 48.61                                                           & 0.7                                                               \\
-Horror                     & 64.23                                                               & 64.8                                                            & 0.57                                                              \\
-History                    & 38.01                                                               & 38.33                                                           & 0.32                                                              \\
-Western                    & 77.21                                                               & 77.38                                                           & 0.17                                                              \\
-Reality-TV                 & 0                                                                   & 0                                                               & 0                                                                 \\
-Biography                  & 39.36                                                               & 38.17                                                           & -1.19                                                             \\
-Drama                      & 73.45                                                               & 72.24                                                           & -1.21                                                             \\
-Thriller                   & 54.86                                                               & 51.81                                                           & -3.05                                                             \\
-Action                     & 18.18                                                               & 11.54                                                           & -6.64                                                            
+\begin{tabular}{l|c|c|c}
+Label & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Tensorflow LR\\ Label F1\end{tabular}} & \multicolumn{1}{l|}{\begin{tabular}[c]{@{}l@{}}Our Model\\ Label F1\end{tabular}} & \multicolumn{1}{l}{\begin{tabular}[c]{@{}l@{}}Percentage\\ Improvement\end{tabular}} \\ \hline
+News & 0.00 & 50.00 & 50.00 \\
+Musical & 33.54 & 43.78 & 10.24 \\
+Animation & 44.66 & 50.23 & 5.57 \\
+Sport & 61.65 & 67.13 & 5.47 \\
+Film Noir & 25.31 & 30.23 & 4.91 \\
+War & 58.64 & 62.92 & 4.27 \\
+Sci-Fi & 68.83 & 72.73 & 3.89 \\
+Adventure & 52.44 & 56.14 & 3.7 \\
+Music & 54.08 & 56.98 & 2.9 \\
+Crime & 60.24 & 62.72 & 2.48 \\
+Documentary & 71.05 & 73.36 & 2.31 \\
+Short & 56.06 & 58.23 & 2.17 \\
+Family & 51.07 & 53.21 & 2.14 \\
+Comedy & 62.87 & 64/67 & 1.8 \\
+Romance & 51.17 & 52.5 & 1.33 \\
+Fantasy & 41.96 & 43.05 & 1.09 \\
+Mystery & 47.91 & 48.61 & 0.7 \\
+Horror & 64.23 & 64.8 & 0.57 \\
+History & 38.01 & 38.33 & 0.32 \\
+Western & 77.21 & 77.38 & 0.17 \\
+Biography & 39.36 & 38.17 & -1.19 \\
+Drama & 73.45 & 72.24 & -1.21 \\
+Thriller & 54.86 & 51.81 & -3.05 \\
+Action & 18.18 & 11.54 & -6.64
 \end{tabular}
 \caption{\label{tab:widgets}IMDb Model Performance at a Label level.}
 \end{table}
@@ -181,23 +191,7 @@ Let's look at a label from the bottom end of the table - \textbf{Action}. This l
 Looking at the performance we can see that the word-vector model predicted more false negatives as compared to the vanilla model. However looking at the test performance, we can see that  our model predicted only 2 fewer true positives as compared to the vanilla model. This might've been caused due to fewer training samples or it was a difficult label to train.
 
 \newpage
-\noindent \textbf{Overall Model Performance}\\
 
-So far we've looked at how the model performed at an individual label level. Now let's look at how the overall model performed. Since each document in the IMDb dataset can belong to multiple genres, we're trying to solve a multi-label classification problem. For multi-label classification, as discussed previously in equation \ref{eq:eval}, we will use Set-Accuracy and Instance-F1 measures to evaluate the model. Along with evaluating the model on the vanilla logistic regression and our word-vector model, we also evaluate the model on pyramid's version of logistic regression. Below is how each of the model's performed.
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{l|c|c}
-IMDb & \textbf{Set Accuracy} & \textbf{Instance F1} \\ \hline
-\textbf{Mean wv embedding} & 7.3 & 45.2 \\
-\textbf{WV model (initial)} & 6.1 & 45.69 \\
-\textbf{LR + WV Reg} & 17.19 & 56.32 \\
-\textbf{Pyramid LR} & 19.66 & 56.14 \\
-\textbf{Tensorflow LR} & 18.21 & 57.87 \\
-\textbf{Our model} & 20.30 & 58.52
-\end{tabular}
-\caption{\label{tab:widgets}Set-Accuracy and Instance-F1 Results for IMDb dataset.}
-\end{table}
 
 \iffalse
 \begin{table}[htbp]
@@ -219,10 +213,8 @@ IMDb & 56.14 & 57.87 & 58.52\\
 \end{table}
 \fi
 
-Looking at the results, we can see that our model has outperformed both the pyramid and vanilla logistic regression models on both Set-Accuracy and Instance-F1.
-
 \newpage
-\subsection{Guardian}
+\section{Guardian}
 
 The Guardian is a National British daily newspaper, known until 1959 as the Manchester Guardian. Its online edition was the fifth most widely read in the world as of October 2014, with over 42 million readers. This dataset contains articles on various topics like World news, UK news, Culture, Politics, Media, Business, Society etc.
 
@@ -247,7 +239,24 @@ Inequality     & Tax and spending
 \caption{\label{tab:widgets}The 20 topic categories for the Guardian dataset with the number of examples assigned to them.}
 \end{table}
 
-\noindent \textbf{Individual Label Performance}\\
+\subsection{Overall Model Performance}
+
+Like the IMDb dataset, each document of the Guardian dataset can belong to multiple tags. So this will also be a multi-label classification problem, and we will be using Set-Accuracy and Instance-F1 measures to evaluate the model. Along with evaluating the model on the vanilla logistic regression and our word-vector model, we also evaluate the model on pyramid's version of logistic regression. Below is how each of the model's performed.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{l|c|c}
+Guardian & \multicolumn{1}{l|}{\textbf{Set Accuracy}} & \textbf{Instance F1} \\ \hline
+\textbf{Mean wv embedding} & 43.65 & 60.61 \\
+\textbf{WV model (initial)} & 42.36 & 59.65 \\
+\textbf{Pyramid LR} & 59.3 & 65.13 \\
+\textbf{Tensorflow LR} & 53.46 & 65.61 \\
+\textbf{Our model} & 59.3 & 69.41
+\end{tabular}
+\caption{\label{tab:widgets}Set-Accuracy and Instance-F1 Results for Guardian dataset.}
+\end{table}
+
+\subsection{Individual Label Performance}
 
 Below is a table showing the individual label performance between both models which has been sorted in descending order of its performance improvement. For this dataset, we did not get any labels that performed badly on the word-vector model as compared to the logistic regression model.\\
 
@@ -263,15 +272,7 @@ Blogging                   & 77.3                                               
 Public finance             & 48.24                                                            & 53.33                                                        & 5.09                                                              \\
 Premier League             & 90                                                               & 95.03                                                        & 5.03                                                              \\
 Research                   & 60.97                                                            & 65.84                                                        & 4.87                                                              \\
-Retail                     & 79.78                                                            & 84.62                                                        & 4.84                                                             
-\end{tabular}
-\caption{\label{tab:widgets}Guardian Model Performance at a Label level.}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{l|c|c|c|}
-\multicolumn{1}{c|}{Label} & \begin{tabular}[c]{@{}c@{}}Tensorflow LR\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Our Model\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Percentage \\ Improvement\end{tabular} \\ \hline
+Retail                     & 79.78                                                            & 84.62                                                        & 4.84                                                             \\
 Inequality                 & 50.3                                                             & 55.12                                                        & 4.82                                                              \\
 Tax and Spending           & 50.73                                                            & 54.35                                                        & 3.62                                                              \\
 Counter-terrorism          & 88.88                                                            & 91.5                                                         & 2.62                                                              \\
@@ -282,10 +283,11 @@ Financial Crisis           & 49.43                                              
 Computing                  & 69.82                                                            & 71.01                                                        & 1.19                                                              \\
 Public sector cuts         & 56.83                                                            & 57.79                                                        & 0.96                                                              \\
 Comedy                     & 77.1                                                             & 77.65                                                        & 0.55                                                              \\
-Christianity               & 75                                                               & 75.47                                                        & 0.47                                                             
+Christianity               & 75                                                               & 75.47                                                        & 0.47 
 \end{tabular}
 \caption{\label{tab:widgets}Guardian Model Performance at a Label level.}
 \end{table}
+
 
 \noindent \textbf{Deeper analysis of label - Drugs:}\\
 
@@ -337,6 +339,7 @@ Looking at another label \textbf{Global economy}, which has 605 train and 72 tes
 \caption{\label{tab:widgets}Word-vector model train-test performance on \textbf{Global economy} Label.}
 \end{table}
 
+\newpage
 \noindent \textbf{Deeper analysis of label - Christianity:}\\
 
 Analyzing a label from the bottom of the table we see that the logistic regression model already had a very high train F1 score and the word-vector model was not able to improve much on this.
@@ -361,23 +364,7 @@ Analyzing a label from the bottom of the table we see that the logistic regressi
 \caption{\label{tab:widgets}Word-vector model train-test performance on \textbf{Christianity} Label.}
 \end{table}
 
-\newpage
-\noindent \textbf{Overall Model Performance}\\
 
-Like the IMDb dataset, each document of the Guardian dataset can belong to multiple tags. So this will also be a multi-label classification problem, and we will be using Set-Accuracy and Instance-F1 measures to evaluate the model. Along with evaluating the model on the vanilla logistic regression and our word-vector model, we also evaluate the model on pyramid's version of logistic regression. Below is how each of the model's performed.
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{l|c|c}
-Guardian & \multicolumn{1}{l|}{\textbf{Set Accuracy}} & \textbf{Instance F1} \\ \hline
-\textbf{Mean wv embedding} & 43.65 & 60.61 \\
-\textbf{WV model (initial)} & 42.36 & 59.65 \\
-\textbf{Pyramid LR} & 59.3 & 65.13 \\
-\textbf{Tensorflow LR} & 53.46 & 65.61 \\
-\textbf{Our model} & 59.3 & 69.41
-\end{tabular}
-\caption{\label{tab:widgets}Set-Accuracy and Instance-F1 Results for Guardian dataset.}
-\end{table}
 
 \iffalse
 \begin{table}[htbp]
@@ -402,7 +389,7 @@ Guardian                      & 65.13                                           
 Looking at the results, we can see that our model has outperformed both the pyramid and vanilla logistic regression models on both Set-Accuracy and Instance-F1.
 
 \newpage
-\subsubsection{20 Newsgroups}
+\section{20 Newsgroups}
 
 The 20 Newsgroups dataset is a collection of approximately 20,000 newsgroup documents, partitioned (nearly) evenly across 20 different newsgroups. It has become a popular data set for experiments in text applications of machine learning techniques, such as text classification and text clustering.
 
@@ -423,11 +410,29 @@ misc.forsale             & talk.politics.guns    & alt.atheism            &  &  
 \caption{\label{tab:widgets}Newsgroups used in newsgroups data}
 \end{table}
 
-\subsubsection{Model Performance on 20 Newsgroup}
+\subsection{Overall Model Performance}
 
-We evaluate how the model performed on the 20 Newsgroup dataset by comparing its performance with the vanilla logistic regression model. We compare both the overall model performance as well as the individual label performance.\\
+Each document in the belongs to one of the 20 classes. So unlike the IMDb and Guardian dataset where we were solving multi-label classification, for this dataset we are solving a multi-class classification problem. So we do not have metrics like Set-Accuracy or Instance-F1 to compute the model performance. We instead will only use the F1 score over the entire dataset. Below is how each of the models performed.
 
-\noindent \textbf{Individual Label Performance}\\
+\begin{table}[htbp]
+\centering
+\begin{tabular}{l|c}
+20Newsgroup & \textbf{F1 Score} \\ \hline
+\textbf{Mean wv embedding} & 45.80 \\
+\textbf{WV model (initial)} & 49.5 \\
+\textbf{LR + WV Reg} & 55.48 \\
+\textbf{Pyramid LR} & 55.64 \\
+\textbf{Tensorflow LR} & 55.75 \\
+\textbf{Our model} & 58.80
+\end{tabular}
+\caption{\label{tab:widgets}Overall F1 Results for 20 Newsgroup dataset.}
+\end{table}
+
+Looking at the results, we can see that our model has outperformed the pyramid and vanilla logistic regression models.
+
+We evaluate how the model performed on the 20 Newsgroup dataset by comparing its performance with the vanilla logistic regression model. We compare both the overall model performance as well as the individual label performance.
+
+\subsection{Individual Label Performance}
 
 Below is a table showing the individual label performance between both models which has been sorted in descending order of its performance improvement.\\
 
@@ -439,15 +444,8 @@ comp.sys.ibm.pc.hardware   & 48.98                                              
 soc.religion.christian     & 58.24                                                            & 64.09                                                        & 5.85                                                              \\
 talk.politics.misc         & 46.45                                                            & 51.9                                                         & 5.45                                                              \\
 comp.os.ms-windows.misc    & 55.17                                                            & 60.3                                                         & 5.13                                                              \\
-comp.graphics              & 51.81                                                            & 56                                                           & 4.19                                                              
-\end{tabular}
-\caption{\label{tab:widgets}20 Newsgroup Model Performance at a Label level.}
-\end{table}
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{l|c|c|c|}
-\multicolumn{1}{c|}{Label} & \begin{tabular}[c]{@{}c@{}}Tensorflow LR\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Our Model\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Percentage \\ Improvement\end{tabular} \\ \hline
+comp.graphics              & 51.81                                                            & 56                                                           & 4.19         
+                    \\
 comp.windows.x             & 67                                                               & 71                                                           & 4                                                                 \\
 sci.electronics            & 51.04                                                            & 55.03                                                        & 3.99                                                              \\
 comp.sys.mac.hardware      & 54.8                                                             & 57.83                                                        & 3.03                                                              \\
@@ -493,8 +491,6 @@ Let's look at the model with the biggest F1 gains \textbf{comp.sys.ibm.pc.hardwa
 
 We can see that the word-vector model got much higher true positives and fewer false negatives as compared to the vanilla model for the trainset. And this performance is also reflected in the testset.
 
-
-\newpage
 \noindent \textbf{Deeper analysis of label - talk.politics.misc:}\\
 
 Analyzing the performance of another label \textbf{talk.politics.misc} which has 636 total samples out of which 548 are train and 88 are test. Below is how both the models performed on the \textbf{talk.politics.misc} label.
@@ -522,41 +518,8 @@ Analyzing the performance of another label \textbf{talk.politics.misc} which has
 
 From the above performance results, we can see that the vanilla logistic regression model already had a very high train F1 score. In-spite of that, the word-vector model managed to further improve it by predicting more true positives correctly.\\
 
-\noindent \textbf{Overall Model Performance}\\
-
-Each document in the belongs to one of the 20 classes. So unlike the IMDb and Guardian dataset where we were solving multi-label classification, for this dataset we are solving a multi-class classification problem. So we do not have metrics like Set-Accuracy or Instance-F1 to compute the model performance. We instead will only use the F1 score over the entire dataset. Below is how each of the models performed.
-
-
-\begin{table}[htbp]
-\centering
-\begin{tabular}{l|c}
-20Newsgroup & \textbf{F1 Score} \\ \hline
-\textbf{Mean wv embedding} & 45.80 \\
-\textbf{WV model (initial)} & 49.5 \\
-\textbf{LR + WV Reg} & 55.48 \\
-\textbf{Pyramid LR} & 55.64 \\
-\textbf{Tensorflow LR} & 55.75 \\
-\textbf{Our model} & 58.80
-\end{tabular}
-\caption{\label{tab:widgets}Overall F1 Results for 20 Newsgroup dataset.}
-\end{table}
-
-\iffalse
-\begin{table}[htbp]
-\centering
-\begin{tabular}{l|c|c|c|}
-Datasets & \begin{tabular}[c]{@{}c@{}}Pyramid-LR\\ F1 Score\end{tabular} & \begin{tabular}[c]{@{}c@{}}Tensorflow-LR\\ F1 Score\end{tabular} & \begin{tabular}[c]{@{}c@{}}Our model\\ F1 Score\end{tabular} \\ \hline
-20 Newsgroup & 55.64 & 55.75 & 58.80
-\end{tabular}
-\caption{\label{tab:widgets}Overall F1 Results.}
-\end{table}
-\fi
-
-Looking at the results, we can see that our model has outperformed the pyramid and vanilla logistic regression models.
-
-
 \newpage
-\subsection{Additional tests}
+\section{Additional tests}
 
 We also ran a validation experiment with artificially modified dataset on the 20 newsgroup dataset to mimic sparse representation: To do this we found the most similar words in the train set with cosine similarity greater than 0.3 and make the feature values of all but one of the words equal to zero. We then compared the performance of our model with logistic regression before and after zeroing feature values of similar words. The below results show that our model was able to get a good test accuracy after the imposed sparsity.\\
 

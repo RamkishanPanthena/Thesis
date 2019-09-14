@@ -31,7 +31,7 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[12pt]{article} 
+\documentclass[12pt]{report} 
  \usepackage[english]{babel}
  \usepackage{apacite}
 \usepackage{array,etoolbox}
@@ -52,10 +52,13 @@
 \graphicspath{{images/}}
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{hyperref}
+\usepackage{pdfpages}
 
 % \usepackage{amsmath}
 
 \begin{document}
+%\includepdf[pages={1}]{images/MS Thesis Approval -- RP}
+\includepdf[pages=-,pagecommand={},width=\textwidth]{approval.pdf}
 
 \begin{titlepage}
 
@@ -127,11 +130,15 @@ Dr. Byron \textsc{Wallace} % Reader's Name
 \end{titlepage}
 % \input{abstract}
 
+\input{abstract.tex}
+
+\tableofcontents
+
 \input{introduction.tex}
 \input{related.tex}
 \input{wordvectors.tex}
-\input{method2.tex}
 \input{methodLR_wvreg.tex}
+\input{method2.tex}
 \input{experiments.tex}
 \input{analysis.tex}
 \newpage

@@ -1,7 +1,7 @@
 \newpage
-\section{Initial models tested}
+\chapter{Initial models tested}
 
-\subsection{Document embedding by averaging word-vectors}
+\section{Document embedding by averaging word-vectors}
 
 We initially tried a basic scenario where documents are represented by a fixed length vector which can then be used for classification even though each document can be of a different length.
 
@@ -15,7 +15,7 @@ One of the common techniques to generate new embeddings to documents is by using
 \label{fig:foo}
 \end{figure}
 
-\subsubsection{Steps to compute fixed embedding vector}
+\subsection{Steps to compute fixed embedding vector}
 
 \begin{itemize}
 \item {First we import a word vector model that either has been pre-trained by Google or retrained on the training data to obtain domain specific word vectors.}
@@ -32,7 +32,7 @@ Once we obtain the mean vector for all the documents, we train a vanilla logisti
 \end{figure}
 
 \newpage
-\subsection{Initial word-vector model}
+\section{Initial word-vector model}
 
 For our initial word-vector model, we built a network where the coefficients are only a function of its word representation ($v^{(i)}$), without the logistic regression weights, i.e.,
 
@@ -50,6 +50,14 @@ where, $w = (w_{1}, w_{2}, ..., w_{d})$ are the parameters of the regression fun
 
 $\quad\qquad\  v= (v_{1}, v_{2}, ..., v_{d})$ are d-dimensional word-representations of word $i$\\
 
+\subsection{Comparison with CNN}
+
+If we compare the word-vector coefficients model to a CNN, then this would be similar to a 1D CNN network having one filter, sum pooling and a sigmoid/softmax activation function at the output layer with cross entropy loss. We are training on a bag-of-words model which does not consider the order of the sentence, so the kernel size which decides the length of the 1d convolutional window would be 1. Also, from our network we can see that the coefficients are a linear sum of the word-vector representation with no activation layer at the end. To replicate the same on the CNN network, we do not apply an activation function to the single filter. It is directly passed onto the sum pooling layer. This network would then be like the word vector coefficients model.
+
+If our task is multi-class classification, then the model can be seen as a CNN model with N filters and softmax function as the activation function, where N equals to the number of the classes in the dataset. We should change the sum pooling layer to make them work in a "filter-wise" style, which means you want to sum over features from the same filter. After pooling layer, the shape of the output should be N*1, where N is the number of filters.
+
+If our task is multi-label classification, everything is the same as the multi-class setup except the activation function is sigmoid.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=16cm, height=8cm]{images/init-wv.png}\\
@@ -58,8 +66,16 @@ $\quad\qquad\  v= (v_{1}, v_{2}, ..., v_{d})$ are d-dimensional word-representat
 \label{fig:foo}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm, height=8cm]{images/wv-cnn.png}\\
+\centering
+\caption{Comparison of word-vector with CNN model}
+\label{fig:foo}
+\end{figure}
+
 \newpage
-\subsection{Vanilla logistic regression with word-vector regularization}
+\section{Vanilla logistic regression with word-vector regularization}
 
 Our proposed method trained a model using coefficients trained from both the vanilla logistic regression model and word-vectors. In this model, instead of generating the feature weights using the word-vectors, we use the word-vectors as a regularizer that is added to the cost function. This regularizer would add a higher penalty to similar words having large differences in their corresponding feature weights. This kind of regularization should technically enforce similar words to have similar weights.
 
@@ -109,7 +125,7 @@ where $\lambda_{1}, \lambda_{2}, \lambda_{3}$ and l1, l2 and word-vector regular
 \end{figure}
 
 \newpage
-\subsubsection{Why would it work?}
+\subsection{Why would it work?}
 
 Let's say there are two words "Russia" and "Soviet" having similar word-vectors due to their reference in similar context. However the word "Russia" is present in the text more often than "Soviet" and has higher feature weight. Due to their high similarity and larger difference in weights, the word-vector model will add a higher penalty to the cost function until their corresponding weights are close to each other.
 
@@ -125,14 +141,13 @@ Now the claim is that the cost function would be minimized if the word-vector pe
     \end{itemize}
 \end{itemize}
 
-\subsubsection{Challenges faced}
+\subsection{Challenges faced}
 
 The major challenge faced while running this model is the amount of time it took to generate the weight differences matrix and computing its dot product with the similarity matrix. Since the model was trained using mini-batch gradient descent, we had to compute the word-vector regularization cost at the end of every mini-batch in order to update the weights. 
 
 So for a medium sized dataset with 10,000 features, 100,000 records and a decent batch size of 10\% of training data, one would have to compute these matrices and get their dot product at least 10 times. And that would train the model for just a single epoch. For training a good enough model with a decent learning rate, one would need to train the model for at least 400-500 epochs. All of this only if we are training a binary classifier. If we are training a multi-class or multi-label classifier with $\sim$2000 different classes, then it would take an exponential amount of time. This puts a huge constraint on the amount of time and resources needed to train the model. For training an even larger dataset with $\sim$100,000 features, it would be even more difficult as training a single epoch itself might take a few hours.
 
-\newpage
-\subsubsection{Workarounds}
+\subsection{Workarounds}
 
 In order to remediate this, we limit the features for which we want to increase the weights. Since our objective through this project was to make rare features have higher weights, we can pick the top k rarest features and look at their similarities with the rest of the features. This would reduce the similarity matrix size from $(n$ x $n)$ to $(n$ x $k)$. We can choose the top rare features based on their IDF (Inverse Document Frequency) score.
 
