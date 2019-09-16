@@ -17,6 +17,14 @@ Some of the datasets we worked with had imbalanced data where some of the classe
 
 In order to handle this data imbalance, we tried resampling the data for these rare classes so that our predictive model would have more balanced data to work with. To balance the data, we over-sampled the rare class by adding copies of instances from the under-represented class. This technique is also known as sampling with replacement. We thus made sure that while training a model on the rare class, each mini-batch had 50\% positive samples (data belonging to that class) and 50\% negative samples.
 
+\section{Pyramid implementation}
+
+We also trained our model through Pyramid, a Java machine learning library developed by one of Dr.Pavlu's PhD student, Cheng Li. It has many state-of-the-art machine learning algorithms implemented which we used to compare our model performance with. More details about Pyramid can be found in the link below:
+
+\begin{itemize}
+\item https://github.com/cheng-li/pyramid
+\end{itemize}
+
 \section{Evaluation}
 
 To evaluate the performance of both models for multi-class problems, we use accuracy and F1 measures.
