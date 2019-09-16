@@ -7,6 +7,20 @@ We compare our model to the vanilla logistic regression algorithm by implementin
 
 We tune our model using learning rate and regularization parameter as hyper-parameters and train with different number of epochs till the loss converges. For multi-label problems, we also use prediction threshold as one of the hyper-parameters to list labels with probabilities greater than the threshold value.
 
+\section{Training stopping criteria and convergence}
+
+We initially trained the model for a predetermined number of iterations and noted the overall cost at the end of each iteration. If we notice the cost to be still decreasing after the predetermined set of iterations, we continue training the model for more epochs. We do this until the cost does not reduce any further thereby giving us the lowest possible minima.
+
+Also in order to find the minima in a reasonable amount of time, we trained the model on mini-batches and updated the weights after computing the cost at the end of each mini-batch cycle. (commonly known as mini-batch gradient descent)
+
+\section{Handling data imbalance across classes}
+
+Some of the datasets we worked with had imbalanced data where some of the classes were not represented equally. 
+
+For eg., we have seen that the Reality-TV(68) and News(12) classes have very few positive samples as compared to the total number of samples (~35,000). This is an imbalanced dataset and the imbalance ratio is ~500:1 and 2900:1 for the Reality-TV and News classes respectively. We can have a class imbalance problem over multi-class or multi-label problems.
+
+In order to handle this data imbalance, we tried resampling the data for these rare classes so that our predictive model would have more balanced data to work with. To balance the data, we over-sampled the rare class by adding copies of instances from the under-represented class. This technique is also known as sampling with replacement. We thus made sure that while training a model on the rare class, each mini-batch had 50\% positive samples (data belonging to that class) and 50\% negative samples.
+
 \section{Evaluation}
 
 To evaluate the performance of both models for multi-class problems, we use accuracy and F1 measures.
@@ -387,6 +401,46 @@ Guardian                      & 65.13                                           
 \fi
 
 Looking at the results, we can see that our model has outperformed both the pyramid and vanilla logistic regression models on both Set-Accuracy and Instance-F1.
+
+\newpage
+\section{Medical dataset}
+
+The medical dataset contains radiology patient data from the MGH hospital. It consits of about 2670 classes which are diagnosis codes used to bill the insurance company. It is a collection of 650,000 instances with 11,000 features. This is a multi-label classification problem and the task is to assign multiple diagnosis codes to the patient data.
+
+We evaluate how the model performed on the Medical dataset by comparing its performance with the vanilla logistic regression model. We compare both the overall model performance as well as the individual label performance.
+
+\subsection{Overall Model Performance}
+
+Looking at the overall results, we can see that there is a big difference in performance of both models. This may have been because the model wasn't trained enough and it had a strong label dependency which affected multi-label evaluation.
+
+\begin{table}[htbp]
+\begin{tabular}{l|l|l}
+Medical                & \multicolumn{1}{c|}{\textbf{Set Accuracy}} & \multicolumn{1}{c}{\textbf{Instance F1}} \\ \hline
+\textbf{Tensorflow LR} & 8.83                                       & 10.18                                    \\
+\textbf{Our model}     & 37.4                                       & 51.04                                   
+\end{tabular}
+\caption{\label{tab:widgets}Set-Accuracy and Instance-F1 Results for Medical dataset.}
+\end{table}
+
+\subsection{Individual Label Performance}
+
+Below is a table showing the individual label performance between both models which has been sorted in descending order of its performance improvement.
+
+\begin{table}[htbp]
+\begin{tabular}{l|c|c|c|}
+\multicolumn{1}{c|}{Label}                                               & \begin{tabular}[c]{@{}c@{}}Tensorflow LR\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Our Model\\ Label F1\end{tabular} & \begin{tabular}[c]{@{}c@{}}Percentage\\ Improvement\end{tabular} \\ \hline
+Abnormal findings                                                        & 19.59                                                         & 82.85                                                     & 63.26                                                            \\
+Osteoarthritis knee                                                      & 17.20                                                        & 80.10                                                   & 62.89                                                            \\
+Soft tissue disorders                                                    & 10.91                                                         & 69.57                                                  & 58.66                                                            \\
+Primary osteoarthritis                                                   & 17.14                                                       & 73.59                                                        & 56.45                                                            \\
+Pleural effusion                                                         & 23.61                                                      & 78.1                                                         & 54.49                                                            \\
+Cough                                                                    & 31.43                                                            & 85.86                                                        & 54.43                                                            \\
+Pneumothorax                                                             & 42.18                                                            & 75.56                                                        & 33.38                                                            \\
+Dyspnea                                                                  & 23.77                                                            & 49.01                                                        & 25.24                                                            \\
+\begin{tabular}[c]{@{}l@{}}Malignant neoplasm\\   of breast\end{tabular} & 95.86                                                            & 99.87                                                        & 3.98                                                            
+\end{tabular}
+\caption{\label{tab:widgets}Medical dataset model performance at a label level.}
+\end{table}
 
 \newpage
 \section{20 Newsgroups}
