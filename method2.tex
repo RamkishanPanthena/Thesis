@@ -1,7 +1,76 @@
 \newpage
-\chapter{Proposed Method}
+\chapter{Proposed Methods}
 
-In this method, we propose to enhance the bag-of-words model for text classification by adding additional features to the vanilla logistic regression model. These new features will act as a regularizer which would assign similar coefficients to words used in similar context.
+We propose to enhance the bag-of-words model for text classification by adding additional features to the vanilla logistic regression model. These new features will act as a regularizer which would assign similar coefficients to words used in similar context. We worked on four different implementations detailed below, out of which we found the second one consistently outperforming the other three and also outperforming the comparison baselines.
+
+\textbf{Obtain word-vectors.}
+Out of the successful deep learning models used for word-embeddings, two of the most popular ones are Word2Vec \cite{le2014distributed} and Global Vectors \cite{pennington2014glove}. For our research, we will be using Google's Word2Vec which has pre-trained word-vectors with 300 dimensions trained using over 100 billion words. 
+
+Also it has been seen that a smaller domain specific Word Vector model is modelled better than a general model trained over a much larger corpus of text. Thus Google's pre-trained Word Vector model which was trained over three million unique words and phrases will be retrained on the training data to generate domain specific Word Vectors.
+
+\textbf{Train new model.}
+Once the features have been extracted as bag-of-words, and their corresponding word-vectors retrained, we can train learning models on the cost functions below.\\
+
+\noindent Below is the link to its source code on GitHub. It will be made publicly available upon thesis completion:
+
+\noindent \url{https://github.com/RamkishanPanthena/Master-s-Thesis}
+
+\section{M1: Initial word-vector model}
+
+For our initial word-vector model, we built a network where the coefficients are only a function of its word representation ($v^{(i)}$), without the logistic regression weights, i.e.,
+
+\begin{equation}\label{lb1}
+\theta^{(i)} = \theta_{wv}^{(i)}
+\end{equation}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm, height=8cm]{images/init-wv.png}\\
+\centering
+\caption{Initial word-vectors model}
+\label{fig:foo}
+\end{figure}
+
+
+These weights as mentioned in Chapter 3, will be learnt through the word representation of the features using a linear regressor, which will then be passed through a sigmoid/softmax function for classfication i.e.,
+
+\begin{equation}
+\theta_{wv}^{(i)} = w_{1}v_{1}^{(i)} + w_{2}v_{2}^{(i)} + ... + w_{d}v_{d}^{(i)} = \sum_{d=1}^{D} w_{d}^{(i)}v_{d}^{(i)}
+\end{equation}
+
+where, $w = (w_{1}, w_{2}, ..., w_{d})$ are the parameters of the regression function. 
+
+$\quad\qquad\  v= (v_{1}, v_{2}, ..., v_{d})$ are d-dimensional word-representations of word $i$\\
+
+
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=16cm, height=8cm]{images/wv-cnn.png}\\
+\centering
+\caption{Comparison of word-vector with CNN model}
+\label{fig:foo}
+\end{figure}
+\textbf{Comparison with CNN.} If we compare the word-vector coefficients model to a CNN, then this would be similar to a 1D CNN network having one filter, sum pooling and a sigmoid/softmax activation function at the output layer with cross entropy loss. We are training on a bag-of-words model which does not consider the order of the sentence, so the kernel size which decides the length of the 1d convolutional window would be 1. Also, from our network we can see that the coefficients are a linear sum of the word-vector representation with no activation layer at the end. To replicate the same on the CNN network, we do not apply an activation function to the single filter. It is directly passed onto the sum pooling layer. This network would then be like the word vector coefficients model.
+
+If our task is multi-class classification, then the model can be seen as a CNN model with N filters and softmax function as the activation function, where N equals to the number of the classes in the dataset. We should change the sum pooling layer to make them work in a "filter-wise" style, which means you want to sum over features from the same filter. After pooling layer, the shape of the output should be N*1, where N is the number of filters.
+
+If our task is multi-label classification, everything is the same as the multi-class setup except the activation function is sigmoid.
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{M2: Sum weights word-vector model} 
+
+The problem we are trying to solve can be formulated as follows: Given a set of m documents with n features, the documents would be represented by matrix X $\in$ R$^{m x n}$. We want to find the coefficients that predict the output Y from the documents X and we want to build a model where the coefficients ($\theta^{(i)}$) are a sum of the weights learnt through logistic regression and a function of its word$_{i}$ representation ($v^{(i)}$), i.e.,
+
+\begin{equation}\label{lb1}
+\theta^{(i)} = \theta_{lr}^{(i)} + \theta_{wv}^{(i)}
+\end{equation}
+
 
 \begin{figure}[htbp]
 \centering
@@ -11,11 +80,6 @@ In this method, we propose to enhance the bag-of-words model for text classifica
 \label{fig:foo}
 \end{figure}
 
-The problem we are trying to solve can be formulated as follows: Given a set of m documents with n features, the documents would be represented by matrix X $\in$ R$^{m x n}$. We want to find the coefficients that predict the output Y from the documents X and we want to build a model where the coefficients ($\theta^{(i)}$) are a sum of the weights learnt through logistic regression and a function of its word$_{i}$ representation ($v^{(i)}$), i.e.,
-
-\begin{equation}\label{lb1}
-\theta^{(i)} = \theta_{lr}^{(i)} + \theta_{wv}^{(i)}
-\end{equation}
 
 These new weights $\theta_{wv}^{(i)}$ would act as a regularization constraint so that similar word representations would have similar coefficients, which satisfies a continuity condition:
 
@@ -98,21 +162,7 @@ Cost(h_{(\theta| w)}(x), y) =
 
 % \section{Implementation}
 
-\section{CNN compared with the modified model}
-
+\textbf{CNN compared with the modified model.}
 We now compare the CNN network to the modified word-vector model, where the feature coefficients are a linear sum of the logistic regression weights and the weights constrained through the word vector representation. Without the vanilla logistic regression weights, the model would be same as the previous 1D CNN network. For this network, we would have to incorporate these vanilla weights to the output of the sum pooling layer before applying the sigmoid/softmax function. For this we would need a different kind of pooling layer that would sum both the pair of weights, i.e, the free vanilla weights and the word-vector weights.
 
-\section{Experimental setup}
-\subsection{Obtain word-vectors}
-
-Out of the successful deep learning models used for word-embeddings, two of the most popular ones are Word2Vec \cite{le2014distributed} and Global Vectors \cite{pennington2014glove}. For our research, we will be using Google's Word2Vec which has pre-trained word-vectors with 300 dimensions trained using over 100 billion words. 
-
-Also it has been seen that a smaller domain specific Word Vector model is modelled better than a general model trained over a much larger corpus of text. Thus Google's pre-trained Word Vector model which was trained over three million unique words and phrases will be retrained on the training data to generate domain specific Word Vectors.
-
-\subsection{Train new model}
-
-Once the features have been extracted using the bag-of-words model and their corresponding word-vectors obtained, we can train a neural network model based on the cost function in (\ref{cost_fn_eq})\\
-
-\noindent Below is the link to its source code on GitHub. It will be made publicly available upon thesis completion:
-
-\noindent \url{https://github.com/RamkishanPanthena/Master-s-Thesis}
+% \subsection{Experimental setup}

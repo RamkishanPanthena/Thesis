@@ -1,7 +1,7 @@
-\newpage
-\chapter{Initial models tested}
+% \newpage
+% \chapter{Other models tested}
 
-\section{Document embedding by averaging word-vectors}
+\section{M3: Document embedding by averaging word-vectors}
 
 We initially tried a basic scenario where documents are represented by a fixed length vector which can then be used for classification even though each document can be of a different length.
 
@@ -31,51 +31,51 @@ Once we obtain the mean vector for all the documents, we train a vanilla logisti
 \label{fig:foo}
 \end{figure}
 
-\newpage
-\section{Initial word-vector model}
+% \newpage
+% \section{Initial word-vector model}
+%
+% For our initial word-vector model, we built a network where the coefficients are only a function of its word representation ($v^{(i)}$), without the logistic regression weights, i.e.,
+%
+% \begin{equation}\label{lb1}
+% \theta^{(i)} = \theta_{wv}^{(i)}
+% \end{equation}
+%
+% These weights as mentioned in Chapter 3, will be learnt through the word representation of the features using a linear regressor, which will then be passed through a sigmoid/softmax function for classfication i.e.,
+%
+% \begin{equation}
+% \theta_{wv}^{(i)} = w_{1}v_{1}^{(i)} + w_{2}v_{2}^{(i)} + ... + w_{d}v_{d}^{(i)} = \sum_{d=1}^{D} w_{d}^{(i)}v_{d}^{(i)}
+% \end{equation}
+%
+% where, $w = (w_{1}, w_{2}, ..., w_{d})$ are the parameters of the regression function.
+%
+% $\quad\qquad\  v= (v_{1}, v_{2}, ..., v_{d})$ are d-dimensional word-representations of word $i$\\
+%
+% \textbf{Comparison with CNN}
+%
+% If we compare the word-vector coefficients model to a CNN, then this would be similar to a 1D CNN network having one filter, sum pooling and a sigmoid/softmax activation function at the output layer with cross entropy loss. We are training on a bag-of-words model which does not consider the order of the sentence, so the kernel size which decides the length of the 1d convolutional window would be 1. Also, from our network we can see that the coefficients are a linear sum of the word-vector representation with no activation layer at the end. To replicate the same on the CNN network, we do not apply an activation function to the single filter. It is directly passed onto the sum pooling layer. This network would then be like the word vector coefficients model.
+%
+% If our task is multi-class classification, then the model can be seen as a CNN model with N filters and softmax function as the activation function, where N equals to the number of the classes in the dataset. We should change the sum pooling layer to make them work in a "filter-wise" style, which means you want to sum over features from the same filter. After pooling layer, the shape of the output should be N*1, where N is the number of filters.
+%
+% If our task is multi-label classification, everything is the same as the multi-class setup except the activation function is sigmoid.
+%
+% \begin{figure}[htbp]
+% \centering
+% \includegraphics[width=16cm, height=8cm]{images/init-wv.png}\\
+% \centering
+% \caption{Initial word-vectors model}
+% \label{fig:foo}
+% \end{figure}
+%
+% \begin{figure}[htbp]
+% \centering
+% \includegraphics[width=16cm, height=8cm]{images/wv-cnn.png}\\
+% \centering
+% \caption{Comparison of word-vector with CNN model}
+% \label{fig:foo}
+% \end{figure}
 
-For our initial word-vector model, we built a network where the coefficients are only a function of its word representation ($v^{(i)}$), without the logistic regression weights, i.e.,
-
-\begin{equation}\label{lb1}
-\theta^{(i)} = \theta_{wv}^{(i)}
-\end{equation}
-
-These weights as mentioned in Chapter 3, will be learnt through the word representation of the features using a linear regressor, which will then be passed through a sigmoid/softmax function for classfication i.e.,
-
-\begin{equation}
-\theta_{wv}^{(i)} = w_{1}v_{1}^{(i)} + w_{2}v_{2}^{(i)} + ... + w_{d}v_{d}^{(i)} = \sum_{d=1}^{D} w_{d}^{(i)}v_{d}^{(i)}
-\end{equation}
-
-where, $w = (w_{1}, w_{2}, ..., w_{d})$ are the parameters of the regression function. 
-
-$\quad\qquad\  v= (v_{1}, v_{2}, ..., v_{d})$ are d-dimensional word-representations of word $i$\\
-
-\subsection{Comparison with CNN}
-
-If we compare the word-vector coefficients model to a CNN, then this would be similar to a 1D CNN network having one filter, sum pooling and a sigmoid/softmax activation function at the output layer with cross entropy loss. We are training on a bag-of-words model which does not consider the order of the sentence, so the kernel size which decides the length of the 1d convolutional window would be 1. Also, from our network we can see that the coefficients are a linear sum of the word-vector representation with no activation layer at the end. To replicate the same on the CNN network, we do not apply an activation function to the single filter. It is directly passed onto the sum pooling layer. This network would then be like the word vector coefficients model.
-
-If our task is multi-class classification, then the model can be seen as a CNN model with N filters and softmax function as the activation function, where N equals to the number of the classes in the dataset. We should change the sum pooling layer to make them work in a "filter-wise" style, which means you want to sum over features from the same filter. After pooling layer, the shape of the output should be N*1, where N is the number of filters.
-
-If our task is multi-label classification, everything is the same as the multi-class setup except the activation function is sigmoid.
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=16cm, height=8cm]{images/init-wv.png}\\
-\centering
-\caption{Initial word-vectors model}
-\label{fig:foo}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=16cm, height=8cm]{images/wv-cnn.png}\\
-\centering
-\caption{Comparison of word-vector with CNN model}
-\label{fig:foo}
-\end{figure}
-
-\newpage
-\section{Vanilla logistic regression with word-vector regularization}
+% \newpage
+\section{M4: Vanilla logistic regression with word-vector regularization}
 
 Our proposed method trained a model using coefficients trained from both the vanilla logistic regression model and word-vectors. In this model, instead of generating the feature weights using the word-vectors, we use the word-vectors as a regularizer that is added to the cost function. This regularizer would add a higher penalty to similar words having large differences in their corresponding feature weights. This kind of regularization should technically enforce similar words to have similar weights.
 
@@ -124,9 +124,8 @@ where $\lambda_{1}, \lambda_{2}, \lambda_{3}$ and l1, l2 and word-vector regular
 \label{fig:foo}
 \end{figure}
 
-\newpage
-\subsection{Why would it work?}
-
+% \newpage
+\textbf{Why would it work?}
 Let's say there are two words "Russia" and "Soviet" having similar word-vectors due to their reference in similar context. However the word "Russia" is present in the text more often than "Soviet" and has higher feature weight. Due to their high similarity and larger difference in weights, the word-vector model will add a higher penalty to the cost function until their corresponding weights are close to each other.
 
 Now the claim is that the cost function would be minimized if the word-vector penalty is minimum. Now let's think about a few cases: 
