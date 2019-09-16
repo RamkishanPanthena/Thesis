@@ -44,7 +44,7 @@ The output probabilities indicate how likely is it to find each word near our in
 \label{fig:foo}
 \end{figure}
 
-\newpage
+% \newpage
 \subsubsection{Model details}
 
 The words cannot be fed to the neural network as a text string. To do this, we represent the words as a one-hot vector. If we have a vocabulary of 10,000 unique words, then the one-hot vector will have 10,000 components (one for every word in the vocabulary) and we'll place a 1 in the position corresponding to the word and 0 in all other positions. The output of the network is also a single vector with 10,000 components containing the probability that a randomly selected nearby word is that vocabulary word. Thus, the output vector will actually be a probability distribution and not a one-hot vector.
@@ -93,7 +93,7 @@ The word vector space implicitly encodes many regularities among words. The resu
 
 Word vectors represent words as a vector of real valued numbers where each point captures a dimension of the word's meaning. Thus, if two different words have very similar "contexts" i.e., what words are likely to appear around them, then the model needs to output very similar results for these two words. And one way for the network to output similar context predictions for these two words is if the word-vectors are similar. So, if two words have similar contexts, then the network will eventually learn similar word vectors for these two words. This means that words such as "engine" and "transmission" should have similar word vectors to the word "car", whereas the word "pineapple" should be quite distant. This can also handle stemming for you - the network will likely learn similar word-vectors for words like "man" and "men" because these should have similar contexts.
 
-\newpage
+% \newpage
 
 \begin{figure}[htbp]
 \centering
@@ -119,7 +119,7 @@ In other words, we can subtract one meaning from the word vector for king (i.e. 
 \label{fig:foo}
 \end{figure}
 
-\newpage
+% \newpage
 \section{Word Pairs and Phrases}
 
 The current implementation of word vectors is limited to its unigram natural behavior. It does not embed bigrams like "American Airlines" as its whole. In some cases, a word pair like "Boston Globe" (a newspaper) has a much different meaning than the individual words "Boston" and "Globe". So it makes sense to treat "Boston Globe" as a single term whenever it occurs when its own word vector representation.
